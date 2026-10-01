@@ -629,11 +629,14 @@ function initTypingEffect() {
   if (!el) return;
 
   // Teks berjalan bisa diubah admin dari tab "Edit Teks Website"
-  let words = getSiteText("hero.typingWords")
-    .split(",")
-    .map((w) => w.trim())
-    .filter(Boolean);
-  if (!words.length) words = ["Wong Kito"];
+  function readWords() {
+    const list = getSiteText("hero.typingWords")
+      .split(",")
+      .map((w) => w.trim())
+      .filter(Boolean);
+    return list.length ? list : ["Wong Kito"];
+  }
+  let words = readWords();
   const typeSpeed = 90, deleteSpeed = 50, holdTime = 1800;
   let wordIndex = 0, charIndex = 0, isDeleting = false;
 
@@ -656,6 +659,7 @@ function initTypingEffect() {
     }
     if (isDeleting && charIndex === 0) {
       isDeleting = false;
+      words = readWords();
       wordIndex = (wordIndex + 1) % words.length;
       setTimeout(tick, 300);
       return;
@@ -992,4 +996,13 @@ document.addEventListener("DOMContentLoaded", () => {
 /* Kalau admin menyimpan teks di tab lain, halaman ini ikut terupdate */
 window.addEventListener("storage", (e) => {
   if (e.key === "siteTexts") applySiteTexts();
+});
+
+/* Kembali dari admin pakai tombol Back: browser menampilkan halaman lama
+   dari cache, jadi baca ulang teks terbaru */
+window.addEventListener("pageshow", (e) => {
+  if (e.persisted) {
+    applySiteTexts();
+    updateNavUser();
+  }
 });

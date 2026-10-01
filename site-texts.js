@@ -133,12 +133,18 @@ function escapeHtml(str) {
 }
 
 /* Terapkan teks hasil edit ke semua elemen [data-edit] di halaman.
-   Elemen yang belum pernah diedit dibiarkan apa adanya (HTML asli). */
+   Elemen yang tidak diedit memakai HTML aslinya (disimpan saat pertama kali),
+   jadi "Kembalikan ke Awal" juga langsung terlihat. */
+const originalHtml = new Map();
+
 function applySiteTexts() {
   const texts = getSiteTexts();
   document.querySelectorAll("[data-edit]").forEach((el) => {
+    if (!originalHtml.has(el)) originalHtml.set(el, el.innerHTML);
     const key = el.getAttribute("data-edit");
-    if (typeof texts[key] !== "string") return;
-    el.innerHTML = escapeHtml(texts[key]).replace(/\n/g, "<br>");
+    el.innerHTML =
+      typeof texts[key] === "string"
+        ? escapeHtml(texts[key]).replace(/\n/g, "<br>")
+        : originalHtml.get(el);
   });
 }
