@@ -1,0 +1,124 @@
+/* ===========================
+   AUTH MODAL
+   =========================== */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(61, 40, 23, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.auth-box {
+  background: var(--white, #fff);
+  border-radius: 20px;
+  padding: 38px 34px 30px;
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  box-shadow: 0 30px 60px rgba(61, 40, 23, 0.3);
+  animation: authFadeIn 0.25s ease;
+}
+
+@keyframes authFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: transparent;
+  border: 0;
+  font-size: 26px;
+  line-height: 1;
+  color: #6b4226;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.auth-close:hover {
+  background: #f3ead4;
+}
+
+.auth-box h3 {
+  font-size: 24px;
+  margin-bottom: 4px;
+  color: #3d2817;
+}
+
+.auth-sub {
+  font-size: 13px;
+  color: #6b4226;
+  margin-bottom: 22px;
+}
+
+.auth-box input {
+  width: 100%;
+  padding: 13px 16px;
+  margin-bottom: 14px;
+  border: 1.5px solid #e0d3b8;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  background: #fffdf7;
+  color: #3d2817;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-box input:focus {
+  outline: none;
+  border-color: #e8b923;
+  box-shadow: 0 0 0 3px rgba(232, 185, 35, 0.2);
+}
+
+.auth-box > div > button:not(.auth-close) {
+  width: 100%;
+  padding: 13px;
+  border: 0;
+  border-radius: 12px;
+  background: #3d2817;
+  color: #e8b923;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.auth-box > div > button:not(.auth-close):hover {
+  background: #2c1c0f;
+  transform: translateY(-1px);
+}
+
+.auth-switch {
+  text-align: center;
+  font-size: 13px;
+  color: #6b4226;
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+.auth-switch a {
+  color: #3d2817;
+  font-weight: 700;
+  text-decoration: underline;
+}
