@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pempek Wong Kito — Rasa Asli Palembang</title>
+  <link rel="icon" type="image/png" href="image/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+  <header>
+    <nav class="container">
+      <a href="#" class="logo">
+        <img src="image/logo.png" alt="Logo Pempek Wong Kito" class="logo-img">
+        <span class="logo-text">Pempek Wong Kito</span>
+      </a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="#cerita">Cerita</a></li>
+        <li><a href="#keunggulan">Keunggulan</a></li>
+        <li><a href="#anatomi">Anatomi</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#testimoni">Testimoni</a></li>
+        <li><a href="#galeri">Galeri</a></li>
+        <li><a href="#lokasi">Lokasi</a></li>
+      </ul>
+      <div class="nav-right">
+        <button class="btn-cart" id="btnCart" onclick="openCart()">
+          🛒 <span class="cart-count" id="cartCount">0</span>
+        </button>
+        <button class="btn-login" id="btnLogin" onclick="openAuth()">Masuk</button>
+        <button id="menuBtn" class="menu-btn">☰</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg">
+      <img src="image/ampera.png" alt="Jembatan Ampera Palembang">
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-ornament hero-ornament-1"></div>
+    <div class="hero-ornament hero-ornament-2"></div>
+
+    <div class="container hero-content">
+      <div class="hero-text">
+        <span class="hero-eyebrow" data-edit="hero.eyebrow">Kuliner Khas Palembang</span>
+        <h1><span data-edit="hero.titlePrefix">Pempek Asli</span> <em class="typing-text" id="typingText"></em><span class="typing-cursor">|</span><span data-edit="hero.titleSuffix">, Rasa yang Selalu Diingat</span></h1>
+        <p data-edit="hero.desc">Berawal dari kecintaan pada rasa khas Palembang, Pempek Wong Kito menjaga resep tradisional dengan ikan tenggiri segar dan cuko yang khas.</p>
+        <div class="hero-buttons">
+          <a href="#menu" class="btn btn-solid" data-edit="hero.btnMenu">Lihat Menu</a>
+          <a href="#anatomi" class="btn btn-outline" data-edit="hero.btnAnatomi">Kenali Lapisannya</a>
+        </div>
+        <div class="hero-stats">
+          <div><h3 data-edit="hero.stat1Value">100%</h3><p data-edit="hero.stat1Label">Ikan pilihan segar</p></div>
+          <div><h3 data-edit="hero.stat2Value">6+</h3><p data-edit="hero.stat2Label">Varian pempek</p></div>
+          <div><h3 data-edit="hero.stat3Value">Sejak 1998</h3><p data-edit="hero.stat3Label">Resep turun-temurun</p></div>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="image/Pempek_palembang.jpg" alt="Pempek Wong Kito" class="hero-photo">
+      </div>
+    </div>
+  </section>
+
+  <!-- CERITA -->
+  <section id="cerita" class="section section-cerita reveal">
+    <div class="container">
+      <div class="section-title">
+        <span class="badge" data-edit="cerita.badge">Cerita Kami</span>
+        <h2 data-edit="cerita.title">Dari Sungai Musi ke Meja Makan Anda</h2>
+      </div>
+      <div class="cerita-grid">
+        <div class="cerita-visual">
+          <div class="cerita-frame">
+            <img src="image/ampera.png" alt="Jembatan Ampera" class="cerita-img-main">
+          </div>
+          <div class="cerita-journey">
+            <span data-edit="cerita.journeyFrom">Dari Sungai Musi</span>
+            <span class="cerita-line"></span>
+            <span data-edit="cerita.journeyTo">ke Meja Anda</span>
+          </div>
+        </div>
+        <div class="cerita-text">
+          <p class="cerita-lead" data-edit="cerita.lead">Berawal dari kecintaan terhadap cita rasa Palembang, <em>Wong Kito</em> menghadirkan pempek dengan resep khas yang diwariskan dari generasi ke generasi.</p>
+          <p data-edit="cerita.p1">Setiap pagi, ikan pilihan datang dari pasar, digiling dengan tangan, dibumbui dengan takaran yang sudah dihafal di luar kepala. Tidak ada jalan pintas — karena rasa asli memang tidak bisa dipalsukan.</p>
+          <p data-edit="cerita.p2">Cuko kami direbus perlahan dengan gula aren asli, cabai, dan asam jawa. Rasa manis, asam, dan pedasnya seimbang — persis seperti yang disantap keluarga Palembang di tepian Sungai Musi sejak dulu.</p>
+          <div class="cerita-sign">
+            <span class="cerita-sign-line"></span>
+            <span><span data-edit="cerita.signGreeting">Salam hangat,</span><br><strong data-edit="cerita.signName">Keluarga Wong Kito</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KEUNGGULAN -->
+  <section id="keunggulan" class="section bg-white reveal">
+    <div class="container">
+      <div class="section-title">
+        <span class="badge" data-edit="keunggulan.badge">Keunggulan</span>
+        <h2 data-edit="keunggulan.title">Kenapa Wong Kito?</h2>
+        <p data-edit="keunggulan.subtitle">Tiga alasan sederhana kenapa pelanggan balik lagi.</p>
+      </div>
+      <div class="keunggulan-grid">
+        <div class="keunggulan-card">
+          <div class="keunggulan-icon">🐟</div>
+          <h3 data-edit="keunggulan.card1Title">Ikan Pilihan</h3>
+          <p data-edit="keunggulan.card1Desc">Menggunakan ikan pilihan dengan tekstur lembut dan rasa gurih alami. Dipilih langsung setiap pagi sebelum matahari terbit.</p>
+        </div>
+        <div class="keunggulan-card">
+          <div class="keunggulan-icon">🥣</div>
+          <h3 data-edit="keunggulan.card2Title">Cuko Racikan Sendiri</h3>
+          <p data-edit="keunggulan.card2Desc">Rasa manis, asam, pedas khas Palembang. Direbus perlahan dengan gula aren asli, cabai rawit, dan asam jawa pilihan.</p>
+        </div>
+        <div class="keunggulan-card">
+          <div class="keunggulan-icon">👨‍🍳</div>
+          <h3 data-edit="keunggulan.card3Title">Dibuat Setiap Hari</h3>
+          <p data-edit="keunggulan.card3Desc">Diproduksi segar untuk menjaga rasa asli. Tidak ada stok lama, tidak ada bahan pengawet. Setiap gigitan baru dibuat pagi itu.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAVORIT -->
+  <section id="favorit" class="section reveal">
+    <div class="container">
+      <div class="section-title">
+        <span class="badge" data-edit="favorit.badge">Favorit</span>
+        <h2 data-edit="favorit.title">Favorit Wong Kito</h2>
+        <p data-edit="favorit.subtitle">Yang paling sering dipesan pelanggan setia kami.</p>
+      </div>
+      <div class="favorit-card">
+        <div class="favorit-img">
+          <img src="image/Pempek_palembang.jpg" alt="Pempek Kapal Selam">
+          <span class="favorit-tag" data-edit="favorit.tag">⭐ Best Seller</span>
+        </div>
+        <div class="favorit-info">
+          <h3 data-edit="favorit.name">Pempek Kapal Selam</h3>
+          <div class="favorit-stars">★★★★★</div>
+          <p class="favorit-desc" data-edit="favorit.desc">Pempek besar berisi telur ayam utuh, dibalut adonan ikan pilihan dengan tekstur kenyal lembut. Disajikan dengan cuko khas Palembang yang bikin nagih.</p>
+          <div class="favorit-price" data-edit="favorit.price">Rp 20.000</div>
+          <button class="btn-order-fav" onclick="addToCart(1)" data-edit="favorit.button">Pesan Sekarang</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section id="menu" class="section bg-white reveal">
+    <div class="container">
+      <div class="section-title">
+        <span class="badge" data-edit="menu.badge">Menu</span>
+        <h2 data-edit="menu.title">Semua Pilihan Pempek</h2>
+        <p data-edit="menu.subtitle">Klik "Pesan" untuk menambah ke keranjang.</p>
+      </div>
+      <div class="menu-grid" id="menuGrid"></div>
+    </div>
+  </section>
+
+  <!-- TESTIMONI -->
+  <section id="testimoni" class="section reveal">
+    <div class="container">
+      <div class="section-title">
+        <span class="badge" data-edit="testimoni.badge">Cerita Pelanggan</span>
+        <h2 data-edit="testimoni.title">Kata Mereka</h2>
+      </div>
+      <div class="testimoni-grid">
+        <div class="testimoni-card">
+          <div class="testimoni-stars">★★★★★</div>
+          <p class="testimoni-text" data-edit="testimoni.t1Text">"Rasa cukonya khas banget. Berasa makan pempek asli Palembang di rumah nenek dulu."</p>
+          <div class="testimoni-user">
+            <span class="testimoni-avatar">D</span>
+            <div><strong data-edit="testimoni.t1Name">Dinda</strong><span data-edit="testimoni.t1City">Palembang</span></div>
+          </div>
+        </div>
+        <div class="testimoni-card">
+          <div class="testimoni-stars">★★★★★</div>
+          <p class="testimoni-text" data-edit="testimoni.t2Text">"Pempek kapal selamnya mantap. Telurnya utuh, ikannya berasa banget. Harga masih ramah."</p>
+          <div class="testimoni-user">
+            <span class="testimoni-avatar">R</span>
+            <div><strong data-edit="testimoni.t2Name">Rizky</strong><span data-edit="testimoni.t2City">Jakarta</span></div>
+          </div>
+        </div>
+        <div class="testimoni-card">
+          <div class="testimoni-stars">★★★★★</div>
+          <p class="testimoni-text" data-edit="testimoni.t3Text">"Pesan buat acara keluarga, semua pada nanya beli di mana. Fresh dan rapi packing-nya."</p>
+          <div class="testimoni-user">
+            <span class="testimoni-avatar">A</span>
+            <div><strong data-edit="testimoni.t3Name">Anisa</strong><span data-edit="testimoni.t3City">Bandung</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERI -->
+  <section id="galeri" class="section bg-white reveal">
+    <div class="container">
+      <div class="section-title">
+        <span class="badge" data-edit="galeri.badge">Galeri</span>
+        <h2 data-edit="galeri.title">Suasana Wong Kito</h2>
+        <p data-edit="galeri.subtitle">Sedikit cerita dari dapur kami.</p>
+      </div>
+      <div class="galeri-grid">
+        <div class="galeri-item galeri-big">
+          <img src="image/Pempek_palembang.jpg" alt="Pempek Palembang">
+        </div>
+        <div class="galeri-item">
+          <img src="image/kapal-Selam.jpg" alt="Pempek Kapal Selam" onerror="this.src='image/Pempek_palembang.jpg'">
+        </div>
+        <div class="galeri-item">
+          <img src="image/pempek-lenjer.jpg" alt="Pempek Lenjer" onerror="this.src='image/Pempek_palembang.jpg'">
+        </div>
+        <div class="galeri-item">
+          <img src="image/Tekwan.jpg" alt="Tekwan" onerror="this.src='image/Pempek_palembang.jpg'">
+        </div>
+        <div class="galeri-item galeri-wide">
+          <img src="image/logo.png" alt="Logo Wong Kito" onerror="this.src='image/Pempek_palembang.jpg'">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOKASI -->
+  <section id="lokasi" class="section reveal">
+    <div class="container">
+      <div class="section-title">
+        <span class="badge" data-edit="lokasi.badge">Lokasi</span>
+        <h2 data-edit="lokasi.title">Temukan Wong Kito</h2>
+        <p data-edit="lokasi.subtitle">Mampir langsung, atau pesan antar ke rumah.</p>
+      </div>
+      <div class="lokasi-grid">
+        <div class="lokasi-info">
+          <div class="lokasi-item">
+            <span class="lokasi-icon">📍</span>
+            <div><strong>Alamat</strong><p data-edit="lokasi.address">Jl. Merdeka No. 123, Ilir Barat I,<br>Palembang, Sumatra Selatan 30131</p></div>
+          </div>
+          <div class="lokasi-item">
+            <span class="lokasi-icon">🕘</span>
+            <div><strong>Jam Buka</strong><p data-edit="lokasi.hours">Setiap hari<br>09.00 - 21.00 WIB</p></div>
+          </div>
+          <div class="lokasi-item">
+            <span class="lokasi-icon">📞</span>
+            <div><strong>Telepon / WhatsApp</strong><p data-edit="lokasi.phone">(0711) 000-0000<br>+62 812-3456-7890</p></div>
+          </div>
+          <a href="https://maps.google.com/?q=Jembatan+Ampera+Palembang" target="_blank" class="btn-maps">
+            🗺️ Buka Google Maps
+          </a>
+        </div>
+        <div class="lokasi-map">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.7282694044715!2d104.75180731475786!3d-2.9916689978182573!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e3b75d5dcdb23b9%3A0xb6cf5e0e5c0f6a3a!2sJembatan%20Ampera!5e0!3m2!1sid!2sid!4v1620000000000" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section bg-white reveal">
+    <div class="container">
+      <div class="section-title">
+        <span class="badge" data-edit="faq.badge">FAQ</span>
+        <h2 data-edit="faq.title">Pertanyaan yang Sering Ditanyakan</h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question"><span data-edit="faq.q1">Pempek kalian terbuat dari ikan apa?</span><span class="faq-icon">+</span></button>
+          <div class="faq-answer"><p data-edit="faq.a1">Pempek kita terbuat dari 100% ikan tenggiri asli, dipilih langsung setiap pagi.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question"><span data-edit="faq.q2">Apakah pempeknya pakai bahan pengawet?</span><span class="faq-icon">+</span></button>
+          <div class="faq-answer"><p data-edit="faq.a2">Tidak, pempek kami dibuat tanpa bahan pengawet sama sekali.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question"><span data-edit="faq.q3">Apakah pempek ini sudah bersertifikat halal?</span><span class="faq-icon">+</span></button>
+          <div class="faq-answer"><p data-edit="faq.a3">Sudah, seluruh produk kami bersertifikat halal.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question"><span data-edit="faq.q4">Berapa lama pempek bisa disimpan?</span><span class="faq-icon">+</span></button>
+          <div class="faq-answer"><p data-edit="faq.a4">Pempek tahan sekitar 2-3 hari di suhu ruang, atau lebih lama kalau disimpan di dalam freezer.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question"><span data-edit="faq.q5">Bisa pesan dalam jumlah banyak untuk acara?</span><span class="faq-icon">+</span></button>
+          <div class="faq-answer"><p data-edit="faq.a5">Bisa, silakan hubungi kami lewat WhatsApp untuk pemesanan dalam jumlah besar.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-songket"></div>
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <div class="logo footer-logo">
+          <img src="image/logo.png" alt="Logo Pempek Wong Kito" class="logo-img">
+          <span class="logo-text">Pempek Wong Kito</span>
+        </div>
+        <p class="footer-tagline" data-edit="footer.tagline">Rasa Asli Palembang</p>
+      </div>
+      <p class="footer-copy" data-edit="footer.copy">&copy; 2026 Pempek Wong Kito · Dibuat dengan ❤️ di Palembang</p>
+    </div>
+    <div class="footer-songket"></div>
+  </footer>
+
+  <!-- AUTH MODAL -->
+  <div id="authModal" class="modal">
+    <div class="auth-box">
+      <button class="auth-close" onclick="closeAuth()">×</button>
+      <div id="loginForm">
+        <h3>Masuk</h3>
+        <p class="auth-sub">Selamat datang kembali di Pempek Wong Kito</p>
+        <input id="loginEmail" type="email" placeholder="Email">
+        <input id="loginPassword" type="password" placeholder="Password">
+        <button onclick="login()">Masuk</button>
+        <p class="auth-switch">Belum punya akun? <a href="#" onclick="showRegister(event)">Daftar</a></p>
+      </div>
+      <div id="registerForm" style="display:none">
+        <h3>Daftar Akun</h3>
+        <p class="auth-sub">Buat akun untuk mulai pesan pempek</p>
+        <input id="regName" type="text" placeholder="Nama Lengkap">
+        <input id="regEmail" type="email" placeholder="Email">
+        <input id="regPassword" type="password" placeholder="Password">
+        <button onclick="register()">Daftar</button>
+        <p class="auth-switch">Sudah punya akun? <a href="#" onclick="showLogin(event)">Masuk</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOMER MODAL -->
+  <div id="customerModal" class="modal">
+    <div class="customer-box">
+      <button class="auth-close" onclick="closeCustomer()">×</button>
+      <div class="customer-head">
+        <div class="customer-avatar" id="customerAvatar">H</div>
+        <div>
+          <h3 id="customerGreeting">Halo 👋</h3>
+          <p class="customer-sub" id="customerSub">Selamat datang kembali</p>
+        </div>
+      </div>
+      <div class="customer-section">
+        <h4>Pesanan Terakhir</h4>
+        <div id="lastOrderBox" class="last-order-box">
+          <p class="customer-empty">Belum ada pesanan.</p>
+        </div>
+      </div>
+      <div class="customer-section">
+        <h4>Menu Favorit Kamu</h4>
+        <div id="favMenuBox" class="fav-menu-box"></div>
+      </div>
+      <div class="customer-section">
+        <h4>Riwayat Pesanan</h4>
+        <div id="orderHistory" class="order-history"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CART MODAL -->
+  <div id="cartModal" class="modal">
+    <div class="cart-box">
+      <button class="auth-close" onclick="closeCart()">×</button>
+      <h3>Keranjang Belanja</h3>
+      <p class="auth-sub">Cek pesanan kamu sebelum checkout.</p>
+      <div id="cartItems" class="cart-items"></div>
+      <div class="cart-summary">
+        <div class="cart-row"><span>Subtotal</span><strong id="cartSubtotal">Rp 0</strong></div>
+        <div class="cart-row"><span>Ongkos Kirim</span><strong id="cartOngkir">Rp 0</strong></div>
+        <div class="cart-row total"><span>Total</span><strong id="cartTotal">Rp 0</strong></div>
+      </div>
+      <button class="btn-checkout" onclick="openCheckout()">Lanjut Checkout</button>
+    </div>
+  </div>
+
+  <!-- CHECKOUT MODAL -->
+  <div id="checkoutModal" class="modal">
+    <div class="checkout-box">
+      <button class="auth-close" onclick="closeCheckout()">×</button>
+      <h3>Checkout</h3>
+      <p class="auth-sub">Isi data pengiriman dengan lengkap.</p>
+      <input id="coName" type="text" placeholder="Nama Penerima">
+      <input id="coPhone" type="tel" placeholder="No. HP (08xx)">
+      <textarea id="coAddress" placeholder="Alamat Lengkap (Jalan, No, RT/RW, Kelurahan, Kecamatan)"></textarea>
+      <label class="co-label">Kota Tujuan</label>
+      <select id="coCity" onchange="updateOngkir()">
+        <option value="8000">Palembang (Rp 8.000)</option>
+        <option value="15000">Lahat / Prabumulih (Rp 15.000)</option>
+        <option value="25000">Jambi / Bandar Lampung (Rp 25.000)</option>
+        <option value="35000">Jakarta / Bandung (Rp 35.000)</option>
+        <option value="45000">Surabaya / Makassar (Rp 45.000)</option>
+      </select>
+      <label class="co-label">Metode Pembayaran</label>
+      <select id="coPayment">
+        <option>Transfer Bank</option>
+        <option>COD (Bayar di Tempat)</option>
+        <option>QRIS</option>
+        <option>E-Wallet (OVO/Dana)</option>
+      </select>
+      <div class="cart-summary">
+        <div class="cart-row"><span>Subtotal</span><strong id="coSubtotal">Rp 0</strong></div>
+        <div class="cart-row"><span>Ongkir</span><strong id="coOngkir">Rp 0</strong></div>
+        <div class="cart-row total"><span>Total Bayar</span><strong id="coTotal">Rp 0</strong></div>
+      </div>
+      <button class="btn-checkout" onclick="placeOrder()">Buat Pesanan</button>
+    </div>
+  </div>
+
+  <!-- SUCCESS MODAL -->
+  <div id="successModal" class="modal">
+    <div class="auth-box success-box">
+      <div class="success-icon">✓</div>
+      <h3>Pesanan Berhasil!</h3>
+      <p class="auth-sub">Nomor pesanan kamu:</p>
+      <p class="order-number" id="orderNumber">-</p>
+      <p class="auth-sub">Kami akan segera memproses pesanan kamu.</p>
+      <button onclick="closeSuccess()">Tutup</button>
+    </div>
+  </div>
+
+  <script src="site-texts.js?v=2"></script>
+  <script src="script.js?v=2"></script>
+</body>
+</html>
