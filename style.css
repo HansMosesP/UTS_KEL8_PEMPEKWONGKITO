@@ -1804,7 +1804,6 @@ footer::before {
   color: var(--kayu-tua);
 }
 
-.auth-box h3,
 .cart-box h3,
 .checkout-box h3 { font-size: 24px; margin-bottom: 4px; }
 
@@ -1814,7 +1813,6 @@ footer::before {
   margin-bottom: 24px;
 }
 
-.auth-box input,
 .checkout-box input,
 .checkout-box textarea,
 .checkout-box select {
@@ -1835,7 +1833,6 @@ footer::before {
   resize: vertical;
 }
 
-.auth-box input:focus,
 .checkout-box input:focus,
 .checkout-box textarea:focus,
 .checkout-box select:focus {
@@ -1845,7 +1842,6 @@ footer::before {
   box-shadow: 0 0 0 3px rgba(201, 151, 43, 0.15);
 }
 
-.auth-box > div > button:not(.auth-close),
 .btn-checkout {
   width: 100%;
   padding: 14px;
@@ -1857,24 +1853,9 @@ footer::before {
   transition: all 0.2s ease;
 }
 
-.auth-box > div > button:not(.auth-close):hover,
 .btn-checkout:hover {
   background: var(--cuko);
   transform: translateY(-1px);
-}
-
-.auth-switch {
-  text-align: center;
-  font-size: 13.5px;
-  color: var(--teks-lembut);
-  margin-top: 18px;
-  margin-bottom: 0;
-}
-
-.auth-switch a {
-  color: var(--cuko);
-  font-weight: 700;
-  text-decoration: underline;
 }
 
 .cart-items {
@@ -2258,8 +2239,8 @@ footer::before {
   .user-btn { padding: 6px; gap: 0; }
   .user-avatar { width: 34px; height: 34px; }
 
-  .auth-box, .cart-box, .checkout-box, .customer-box { padding: 28px 22px 24px; }
-  .auth-box h3, .cart-box h3, .checkout-box h3 { font-size: 21px; }
+  .cart-box, .checkout-box, .customer-box { padding: 28px 22px 24px; }
+  .cart-box h3, .checkout-box h3 { font-size: 21px; }
 
   .hero-stats { gap: 22px; margin-top: 34px; padding-top: 24px; }
   .hero-stats > div h3 { font-size: 22px; }

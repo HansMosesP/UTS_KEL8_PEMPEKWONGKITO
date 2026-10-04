@@ -1,0 +1,70 @@
+#authModal .auth-box h3 {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+#authModal .auth-sub {
+  font-size: 13.5px;
+  color: var(--teks-lembut);
+  margin-bottom: 24px;
+}
+
+#authModal .auth-box input {
+  width: 100%;
+  padding: 13px 16px;
+  margin-bottom: 14px;
+  border: 1.5px solid var(--garis);
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14.5px;
+  background: var(--krem);
+  color: var(--teks);
+  transition: all 0.2s ease;
+}
+
+#authModal .auth-box input:focus {
+  outline: none;
+  border-color: var(--kunyit);
+  background: var(--kertas);
+  box-shadow: 0 0 0 3px rgba(201, 151, 43, 0.15);
+}
+
+#authModal .auth-box > div > button:not(.auth-close) {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  background: var(--kayu-tua);
+  color: var(--kunyit-muda);
+  font-weight: 700;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+#authModal .auth-box > div > button:not(.auth-close):hover {
+  background: var(--cuko);
+  transform: translateY(-1px);
+}
+
+#authModal .auth-switch {
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--teks-lembut);
+  margin-top: 18px;
+  margin-bottom: 0;
+}
+
+#authModal .auth-switch a {
+  color: var(--cuko);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+@media (max-width: 620px) {
+  #authModal .auth-box {
+    padding: 28px 22px 24px;
+  }
+
+  #authModal .auth-box h3 {
+    font-size: 21px;
+  }
+}
