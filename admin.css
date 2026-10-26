@@ -19,8 +19,8 @@
   --teks: #2b1c0f;
   --teks-lembut: #6b5440;
 
-  --font-display: 'Playfair Display', Georgia, serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
 
   --shadow-soft: 0 4px 20px rgba(43, 28, 15, 0.06);
   --shadow-card: 0 10px 40px -12px rgba(43, 28, 15, 0.18);
@@ -30,7 +30,85 @@
   --radius-lg: 20px;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
+
+.menu-create-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+}
+.menu-create-form > input {
+  flex: 1 1 220px;
+}
+.menu-create-form > .btn-primary {
+  flex-basis: 100%;
+}
+.preview-wrap img {
+  width: 120px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.order-date {
+  font-size: 12px;
+  color: var(--teks-lembut);
+}
+.order-address {
+  grid-column: 1 / -1;
+}
+.order-total-line {
+  border-top: 1px dashed var(--garis);
+  margin-top: 6px;
+  padding-top: 6px;
+  font-weight: 700;
+}
+.admin-empty {
+  padding: 20px 0;
+  color: var(--teks-lembut);
+  text-align: center;
+}
+.texts-fields {
+  display: grid;
+  gap: 24px;
+}
+.notif-item {
+  display: flex;
+  width: 100%;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.notif-item.unread {
+  background: var(--krem);
+}
+.admin-loading {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+}
+.admin-container {
+  padding-bottom: 48px;
+}
+.admin-app .btn-logout,
+.admin-app .btn-notif,
+.admin-app .tab-btn,
+.admin-app .btn-edit,
+.admin-app .btn-primary,
+.admin-app .btn-reset-all {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.admin-app .tab-btn.nav-link.active {
+  background: var(--kayu-tua);
+  color: var(--kunyit-muda);
+}
 
 body {
   margin: 0;
@@ -42,8 +120,16 @@ body {
   font-size: 15px;
 
   background-image:
-    radial-gradient(circle at 25% 15%, rgba(212, 160, 23, 0.04) 0%, transparent 45%),
-    radial-gradient(circle at 85% 75%, rgba(166, 59, 28, 0.035) 0%, transparent 45%);
+    radial-gradient(
+      circle at 25% 15%,
+      rgba(212, 160, 23, 0.04) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 85% 75%,
+      rgba(166, 59, 28, 0.035) 0%,
+      transparent 45%
+    );
 }
 
 body::before {
@@ -54,13 +140,26 @@ body::before {
   z-index: 0;
   opacity: 0.035;
   background-image:
-    radial-gradient(circle at 20px 20px, var(--kayu-tua) 1.5px, transparent 1.6px),
-    radial-gradient(circle at 60px 60px, var(--kayu-tua) 1.5px, transparent 1.6px);
+    radial-gradient(
+      circle at 20px 20px,
+      var(--kayu-tua) 1.5px,
+      transparent 1.6px
+    ),
+    radial-gradient(
+      circle at 60px 60px,
+      var(--kayu-tua) 1.5px,
+      transparent 1.6px
+    );
   background-size: 80px 80px;
-  background-position: 0 0, 40px 40px;
+  background-position:
+    0 0,
+    40px 40px;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-family: var(--font-display);
   margin: 0 0 12px;
   color: var(--kayu-tua);
@@ -68,11 +167,21 @@ h1, h2, h3, h4 {
   line-height: 1.25;
 }
 
-h2 { font-size: 22px; }
-h3 { font-size: 17px; }
+h2 {
+  font-size: 22px;
+}
+h3 {
+  font-size: 17px;
+}
 
-p { margin: 0 0 12px; }
-button { font-family: inherit; cursor: pointer; border: 0; }
+p {
+  margin: 0 0 12px;
+}
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: 0;
+}
 
 /* ===================================================
    NAVBAR ADMIN
@@ -199,18 +308,18 @@ button { font-family: inherit; cursor: pointer; border: 0; }
   color: var(--kunyit-muda);
 }
 
-.tab-content { display: none; flex-direction: column; gap: 24px; }
-.tab-content.active { display: flex; }
+.tab-content {
+  display: none;
+  flex-direction: column;
+  gap: 24px;
+}
+.tab-content.active {
+  display: flex;
+}
 
 /* ===================================================
    STATS GRID
    =================================================== */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-}
-
 .stat-card {
   background: var(--kertas);
   border-radius: var(--radius);
@@ -350,9 +459,13 @@ button { font-family: inherit; cursor: pointer; border: 0; }
   border-style: solid;
 }
 
-.file-label input[type="file"] { display: none; }
+.file-label input[type="file"] {
+  display: none;
+}
 
-.preview-wrap { margin: 10px 0 16px; }
+.preview-wrap {
+  margin: 10px 0 16px;
+}
 
 .preview-wrap img {
   max-width: 220px;
@@ -482,11 +595,21 @@ button { font-family: inherit; cursor: pointer; border: 0; }
   min-width: 4px;
 }
 
-.chart-fill.pending { background: linear-gradient(90deg, #f0b429, #d4a017); }
-.chart-fill.process { background: linear-gradient(90deg, #3b82f6, #2563eb); }
-.chart-fill.shipped { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
-.chart-fill.done    { background: linear-gradient(90deg, var(--musi-muda), var(--musi)); }
-.chart-fill.cancel  { background: linear-gradient(90deg, #ef4444, var(--bata)); }
+.chart-fill.pending {
+  background: linear-gradient(90deg, #f0b429, #d4a017);
+}
+.chart-fill.process {
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+}
+.chart-fill.shipped {
+  background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+}
+.chart-fill.done {
+  background: linear-gradient(90deg, var(--musi-muda), var(--musi));
+}
+.chart-fill.cancel {
+  background: linear-gradient(90deg, #ef4444, var(--bata));
+}
 
 .chart-count {
   font-weight: 800;
@@ -618,11 +741,26 @@ button { font-family: inherit; cursor: pointer; border: 0; }
   text-transform: uppercase;
 }
 
-.status-pending { background: #fef3c7; color: #92400e; }
-.status-process { background: #dbeafe; color: #1e40af; }
-.status-shipped { background: #ede9fe; color: #5b21b6; }
-.status-done    { background: #d1fae5; color: #065f46; }
-.status-cancel  { background: #fee2e2; color: #991b1b; }
+.status-pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+.status-process {
+  background: #dbeafe;
+  color: #1e40af;
+}
+.status-shipped {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+.status-done {
+  background: #d1fae5;
+  color: #065f46;
+}
+.status-cancel {
+  background: #fee2e2;
+  color: #991b1b;
+}
 
 .order-info-grid {
   display: grid;
@@ -685,7 +823,9 @@ button { font-family: inherit; cursor: pointer; border: 0; }
   font-size: 12.5px;
 }
 
-.btn-status:hover { background: var(--cuko); }
+.btn-status:hover {
+  background: var(--cuko);
+}
 
 .btn-cancel-order {
   background: var(--bata);
@@ -697,7 +837,9 @@ button { font-family: inherit; cursor: pointer; border: 0; }
   transition: background 0.2s ease;
 }
 
-.btn-cancel-order:hover { background: var(--cuko); }
+.btn-cancel-order:hover {
+  background: var(--cuko);
+}
 
 /* ===================================================
    NOTIFIKASI
@@ -748,7 +890,9 @@ button { font-family: inherit; cursor: pointer; border: 0; }
   border: 1px solid var(--garis);
 }
 
-.notif-panel.show { display: block; }
+.notif-panel.show {
+  display: block;
+}
 
 .notif-head {
   display: flex;
@@ -824,13 +968,7 @@ button { font-family: inherit; cursor: pointer; border: 0; }
 /* ===================================================
    RESPONSIVE
    =================================================== */
-@media (max-width: 900px) {
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
 @media (max-width: 620px) {
-  .stats-grid { grid-template-columns: 1fr; }
-
   .admin-menu-item {
     grid-template-columns: 70px 1fr;
     gap: 12px;
@@ -857,14 +995,18 @@ button { font-family: inherit; cursor: pointer; border: 0; }
     justify-content: space-between;
   }
 
-  .order-info-grid { grid-template-columns: 1fr; }
+  .order-info-grid {
+    grid-template-columns: 1fr;
+  }
 
   .chart-row {
     grid-template-columns: 90px 1fr 40px;
     gap: 8px;
   }
 
-  .chart-label { font-size: 12px; }
+  .chart-label {
+    font-size: 12px;
+  }
 
   .notif-panel {
     width: 92%;
@@ -877,7 +1019,9 @@ button { font-family: inherit; cursor: pointer; border: 0; }
     font-size: 13px;
   }
 
-  .card { padding: 24px 20px; }
+  .card {
+    padding: 24px 20px;
+  }
 }
 
 /* ===================================================
@@ -1067,7 +1211,7 @@ button { font-family: inherit; cursor: pointer; border: 0; }
   border: 0;
   padding: 9px 16px;
   border-radius: 10px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 700;
   font-size: 12.5px;
   cursor: pointer;
@@ -1115,8 +1259,14 @@ button { font-family: inherit; cursor: pointer; border: 0; }
 }
 
 @keyframes editFadeIn {
-  from { opacity: 0; transform: translateY(16px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .edit-close {
@@ -1224,7 +1374,7 @@ button { font-family: inherit; cursor: pointer; border: 0; }
   color: var(--kunyit-muda);
   padding: 10px 20px;
   border-radius: 10px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 700;
   font-size: 13px;
   cursor: pointer;
@@ -1253,7 +1403,7 @@ button { font-family: inherit; cursor: pointer; border: 0; }
   flex: 1;
   padding: 14px;
   border-radius: 12px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 700;
   font-size: 14px;
   cursor: pointer;
@@ -1339,7 +1489,9 @@ button { font-family: inherit; cursor: pointer; border: 0; }
   border: 1px solid var(--musi);
 }
 
-.btn-view-site:hover { background: var(--musi-muda); }
+.btn-view-site:hover {
+  background: var(--musi-muda);
+}
 
 .btn-reset-all {
   background: transparent;
@@ -1371,7 +1523,9 @@ button { font-family: inherit; cursor: pointer; border: 0; }
   transition: border-color 0.2s ease;
 }
 
-.text-field.changed { border-left-color: var(--kunyit); }
+.text-field.changed {
+  border-left-color: var(--kunyit);
+}
 
 .text-field-head {
   display: flex;
@@ -1414,10 +1568,14 @@ button { font-family: inherit; cursor: pointer; border: 0; }
 }
 
 .text-field.changed .text-field-badge,
-.text-field.changed .btn-reset-field { display: inline-block; }
+.text-field.changed .btn-reset-field {
+  display: inline-block;
+}
 
 .card .text-field input,
-.card .text-field textarea { margin-bottom: 2px; }
+.card .text-field textarea {
+  margin-bottom: 2px;
+}
 
 .card .text-field textarea {
   min-height: 70px;
@@ -1459,5 +1617,7 @@ button { font-family: inherit; cursor: pointer; border: 0; }
     padding: 14px 20px;
   }
 
-  .texts-savebar .btn-primary { width: 100%; }
+  .texts-savebar .btn-primary {
+    width: 100%;
+  }
 }

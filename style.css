@@ -33,6 +33,33 @@
 html, body { margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
+.auth-form, .checkout-form { display: flex; flex-direction: column; gap: 12px; }
+.auth-switch button { padding: 0; background: transparent; color: var(--bata); font-weight: 700; }
+.cart-empty, .empty-menu { grid-column: 1 / -1; padding: 20px 0; color: var(--teks-lembut); text-align: center; }
+.btn-checkout:disabled { opacity: .55; cursor: not-allowed; }
+.anatomy-react { display: grid; grid-template-columns: minmax(260px, .9fr) 1.1fr; align-items: center; gap: 42px; max-width: 960px; margin: 0 auto; }
+.anatomy-plate { position: relative; overflow: hidden; border-radius: var(--radius-lg); box-shadow: var(--shadow-card); }
+.anatomy-plate img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+.anatomy-number { position: absolute; top: 16px; left: 16px; display: grid; width: 42px; aspect-ratio: 1; place-items: center; border-radius: 50%; background: var(--kunyit); color: var(--kayu-tua); font-weight: 800; }
+.anatomy-detail { display: grid; gap: 20px; }
+.anatomy-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.anatomy-tabs .anatomi-tab { text-align: left; }
+.anatomy-copy { min-height: 130px; padding: 22px; border-left: 3px solid var(--kunyit); background: var(--kertas); }
+.anatomy-copy p { color: var(--teks-lembut); }
+.anatomy-copy strong { color: var(--musi); }
+.lokasi-map iframe { width: 100%; height: 100%; min-height: 320px; border: 0; }
+.fav-menu-box { display: grid; gap: 8px; }
+.fav-menu-item { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 12px; border: 1px solid var(--garis); border-radius: 8px; background: var(--kertas); color: var(--teks); text-align: left; }
+.fav-menu-item h5 { margin: 0; }
+.customer-dashboard { min-height: 55vh; }
+.customer-dashboard > a { display: inline-block; margin: 10px 14px 0 0; color: var(--bata); font-weight: 700; }
+.order-history-item > div span { color: var(--teks-lembut); font-size: 12px; }
+
+@media (max-width: 720px) {
+  .anatomy-react { grid-template-columns: 1fr; gap: 24px; }
+  .anatomy-plate { max-width: 420px; margin: 0 auto; }
+}
+
 body {
   font-family: var(--font-body);
   background: var(--krem);
