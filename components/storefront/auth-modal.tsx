@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import Swal from "sweetalert2";
 import { DEFAULT_ADMIN } from "../../lib/defaults";
 import { useStore } from "../../lib/store";
+import type { User } from "../../lib/types";
 import Modal from "../shared/modal";
 
 export default function AuthModal({
@@ -16,7 +17,7 @@ export default function AuthModal({
   const { users, setUsers, setCurrentUser } = useStore();
   const [mode, setMode] = useState<"login" | "register">("login");
 
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = String(data.get("email") ?? "")
@@ -33,55 +34,67 @@ export default function AuthModal({
         });
         return;
       }
-      if (users.some((user) => user.email.toLowerCase() === email)) {
-        void Swal.fire({ icon: "error", title: "Email sudah terdaftar" });
-        return;
-      }
-      const user = {
-        id: Date.now(),
-        name,
-        email,
-        password,
-        role: "customer" as const,
-      };
-      setUsers([...users, user]);
-      setCurrentUser(user);
-      onClose();
-      void Swal.fire({
-        icon: "success",
-        title: "Pendaftaran berhasil!",
-        text: `Selamat datang, ${name}!`,
-      });
-      return;
     }
 
-    if (email === DEFAULT_ADMIN.email && password === DEFAULT_ADMIN.password) {
+    if (
+      mode === "login" &&
+      email === DEFAULT_ADMIN.email &&
+      password === DEFAULT_ADMIN.password
+    ) {
       setCurrentUser(DEFAULT_ADMIN);
       window.location.assign("/admin");
       return;
     }
-    const user = users.find(
-      (item) =>
-        item.email.toLowerCase() === email && item.password === password,
-    );
-    if (!user) {
+
+    try {
+      const response = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: mode,
+          name: mode === "register" ? String(data.get("name") ?? "").trim() : undefined,
+          email,
+          password,
+        }),
+      });
+      const result = (await response.json()) as {
+        user?: User;
+        error?: string;
+      };
+      if (!response.ok || !result.user) {
+        void Swal.fire({
+          icon: "error",
+          title: mode === "register" ? "Pendaftaran gagal" : "Login gagal",
+          text: result.error ?? "Permintaan tidak dapat diproses.",
+        });
+        return;
+      }
+      if (mode === "register") setUsers([...users, result.user]);
+      setCurrentUser(result.user);
+      onClose();
+      void Swal.fire(
+        mode === "register"
+          ? {
+              icon: "success",
+              title: "Pendaftaran berhasil!",
+              text: `Selamat datang, ${result.user.name}!`,
+            }
+          : {
+              toast: true,
+              position: "top-end",
+              timer: 2200,
+              showConfirmButton: false,
+              icon: "success",
+              title: `Selamat datang, ${result.user.name}!`,
+            },
+      );
+    } catch {
       void Swal.fire({
         icon: "error",
-        title: "Login gagal",
-        text: "Email atau password salah.",
+        title: "Server tidak terhubung",
+        text: "Coba lagi setelah koneksi lokal tersedia.",
       });
-      return;
     }
-    setCurrentUser({ name: user.name, email: user.email, role: "customer" });
-    onClose();
-    void Swal.fire({
-      toast: true,
-      position: "top-end",
-      timer: 2200,
-      showConfirmButton: false,
-      icon: "success",
-      title: `Selamat datang, ${user.name}!`,
-    });
   };
 
   return (
