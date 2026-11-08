@@ -37,7 +37,7 @@ export async function POST(request: Request) {
           { status: 400 },
         );
       }
-      const user = registerCustomer(name, email, password);
+      const user = await registerCustomer(name, email, password);
       if (!user) {
         return NextResponse.json(
           { error: "Email sudah terdaftar." },
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
     }
 
     if (body.action === "login") {
-      const user = authenticateCustomer(email, password);
+      const user = await authenticateCustomer(email, password);
       if (!user) {
         return NextResponse.json(
           { error: "Email atau password salah." },
@@ -59,7 +59,8 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ error: "Aksi autentikasi tidak valid." }, { status: 400 });
-  } catch {
+  } catch (error) {
+    console.error("Authentication request failed.", error);
     return NextResponse.json(
       { error: "Server gagal memproses autentikasi." },
       { status: 500 },

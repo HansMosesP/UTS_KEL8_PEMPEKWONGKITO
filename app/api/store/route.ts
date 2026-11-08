@@ -13,10 +13,22 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  return NextResponse.json(
-    { store: getStoreSnapshot(), legacyImported: isLegacyImported() },
-    { headers: { "Cache-Control": "no-store" } },
-  );
+  try {
+    const [store, legacyImported] = await Promise.all([
+      getStoreSnapshot(),
+      isLegacyImported(),
+    ]);
+    return NextResponse.json(
+      { store, legacyImported },
+      { headers: { "Cache-Control": "no-store" } },
+    );
+  } catch (error) {
+    console.error("Failed to read PostgreSQL store.", error);
+    return NextResponse.json(
+      { error: "Gagal membaca data dari PostgreSQL." },
+      { status: 500 },
+    );
+  }
 }
 
 export async function PUT(request: Request) {
@@ -29,11 +41,12 @@ export async function PUT(request: Request) {
     ) {
       return NextResponse.json({ error: "Data tidak valid." }, { status: 400 });
     }
-    saveStoreValue(body.key as WritableStoreKey, body.value);
+    await saveStoreValue(body.key as WritableStoreKey, body.value);
     return NextResponse.json({ ok: true });
-  } catch {
+  } catch (error) {
+    console.error("Failed to save PostgreSQL store value.", error);
     return NextResponse.json(
-      { error: "Gagal menyimpan data ke SQLite." },
+      { error: "Gagal menyimpan data ke PostgreSQL." },
       { status: 500 },
     );
   }
@@ -48,11 +61,12 @@ export async function POST(request: Request) {
         { status: 400 },
       );
     }
-    importLegacyStore(body.legacy);
-    return NextResponse.json(getStoreSnapshot());
-  } catch {
+    await importLegacyStore(body.legacy);
+    return NextResponse.json(await getStoreSnapshot());
+  } catch (error) {
+    console.error("Failed to import legacy store into PostgreSQL.", error);
     return NextResponse.json(
-      { error: "Gagal memindahkan data lama ke SQLite." },
+      { error: "Gagal memindahkan data lama ke PostgreSQL." },
       { status: 500 },
     );
   }

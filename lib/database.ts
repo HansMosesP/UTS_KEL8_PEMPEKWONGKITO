@@ -1,7 +1,5 @@
-import Database from "better-sqlite3";
+import { PrismaClient } from "@prisma/client";
 import { randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
-import { mkdirSync } from "node:fs";
-import { dirname, join } from "node:path";
 import { DEFAULT_MENU } from "./defaults";
 import type { User } from "./types";
 
@@ -24,20 +22,11 @@ export type WritableStoreKey = (typeof WRITABLE_STORE_KEYS)[number];
 export type LegacyStore = Partial<Record<StoreKey, unknown>>;
 export type StoreSnapshot = Record<StoreKey, unknown>;
 
-const databasePath =
-  process.env.SQLITE_DB_PATH ||
-  join(process.cwd(), "data", "pempek-wong-kito.db");
-mkdirSync(dirname(databasePath), { recursive: true });
-
-const database = new Database(databasePath);
-database.pragma("journal_mode = WAL");
-database.pragma("foreign_keys = ON");
-database.exec(`
-  CREATE TABLE IF NOT EXISTS app_state (
-    key TEXT PRIMARY KEY,
-    value TEXT NOT NULL
-  )
-`);
+const globalForPrisma = globalThis as typeof globalThis & {
+  prisma?: PrismaClient;
+};
+const prisma = globalForPrisma.prisma ?? new PrismaClient();
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 const initialState: StoreSnapshot = {
   menuData: DEFAULT_MENU,
@@ -46,20 +35,30 @@ const initialState: StoreSnapshot = {
   siteTexts: {},
   adminNotifs: [],
 };
-const insertState = database.prepare(
-  "INSERT OR IGNORE INTO app_state (key, value) VALUES (?, ?)",
-);
-for (const key of STORE_KEYS) {
-  insertState.run(key, JSON.stringify(initialState[key]));
-}
-insertState.run("__legacy_imported__", "false");
 
-const selectState = database.prepare(
-  "SELECT value FROM app_state WHERE key = ?",
-);
-const updateState = database.prepare(
-  "INSERT INTO app_state (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value",
-);
+let initialization: Promise<void> | undefined;
+
+async function ensureInitialized(): Promise<void> {
+  if (!initialization) {
+    initialization = (async () => {
+      await prisma.appState.createMany({
+        data: Object.entries(initialState).map(([key, value]) => ({
+          key,
+          value: JSON.stringify(value),
+        })),
+        skipDuplicates: true,
+      });
+      await prisma.appState.createMany({
+        data: [{ key: "__legacy_imported__", value: "false" }],
+        skipDuplicates: true,
+      });
+    })().catch((error: unknown) => {
+      initialization = undefined;
+      throw error;
+    });
+  }
+  await initialization;
+}
 
 function hashPassword(password: string): string {
   const salt = randomBytes(16).toString("hex");
@@ -71,8 +70,10 @@ function makeUserSafe(user: User): User {
   return safeUser;
 }
 
-function readUsers(): User[] {
-  const row = selectState.get("usersData") as { value: string };
+async function readUsers(): Promise<User[]> {
+  const row = await prisma.appState.findUniqueOrThrow({
+    where: { key: "usersData" },
+  });
   return JSON.parse(row.value) as User[];
 }
 
@@ -85,48 +86,72 @@ function verifyPassword(stored: string | undefined, password: string): boolean {
   return expected.length === actual.length && timingSafeEqual(expected, actual);
 }
 
-const existingUsers = readUsers();
-let usersNeedHashing = false;
-const securedUsers = existingUsers.map((user) => {
-  if (user.password && !user.password.startsWith("scrypt$")) {
-    usersNeedHashing = true;
-    return { ...user, password: hashPassword(user.password) };
-  }
-  return user;
-});
-if (usersNeedHashing) {
-  updateState.run("usersData", JSON.stringify(securedUsers));
+async function upsertStoreValue(
+  key: StoreKey | "__legacy_imported__",
+  value: unknown,
+): Promise<void> {
+  const serialized = typeof value === "string" ? value : JSON.stringify(value);
+  await prisma.appState.upsert({
+    where: { key },
+    create: { key, value: serialized },
+    update: { value: serialized },
+  });
 }
 
-export function getStoreSnapshot(): StoreSnapshot {
+async function secureExistingUsers(): Promise<void> {
+  const users = await readUsers();
+  let usersNeedHashing = false;
+  const securedUsers = users.map((user) => {
+    if (user.password && !user.password.startsWith("scrypt$")) {
+      usersNeedHashing = true;
+      return { ...user, password: hashPassword(user.password) };
+    }
+    return user;
+  });
+  if (usersNeedHashing) await upsertStoreValue("usersData", securedUsers);
+}
+
+export async function getStoreSnapshot(): Promise<StoreSnapshot> {
+  await ensureInitialized();
+  await secureExistingUsers();
+  const rows = await prisma.appState.findMany({
+    where: { key: { in: [...STORE_KEYS] } },
+  });
+  const values = new Map(rows.map((row) => [row.key, JSON.parse(row.value)]));
   return Object.fromEntries(
-    STORE_KEYS.map((key) => {
-      const row = selectState.get(key) as { value: string };
-      const value = JSON.parse(row.value) as unknown;
-      return [
-        key,
-        key === "usersData" && Array.isArray(value)
-          ? value.map((user) => makeUserSafe(user as User))
-          : value,
-      ];
-    }),
+    STORE_KEYS.map((key) => [
+      key,
+      key === "usersData" && Array.isArray(values.get(key))
+        ? (values.get(key) as User[]).map(makeUserSafe)
+        : values.get(key),
+    ]),
   ) as StoreSnapshot;
 }
 
-export function isLegacyImported(): boolean {
-  const row = selectState.get("__legacy_imported__") as
-    | { value: string }
-    | undefined;
+export async function isLegacyImported(): Promise<boolean> {
+  await ensureInitialized();
+  const row = await prisma.appState.findUnique({
+    where: { key: "__legacy_imported__" },
+  });
   return row?.value === "true";
 }
 
-export function saveStoreValue(key: WritableStoreKey, value: unknown): void {
-  updateState.run(key, JSON.stringify(value));
+export async function saveStoreValue(
+  key: WritableStoreKey,
+  value: unknown,
+): Promise<void> {
+  await ensureInitialized();
+  await upsertStoreValue(key, value);
 }
 
-export function importLegacyStore(legacy: LegacyStore): void {
-  const importOnce = database.transaction(() => {
-    if (isLegacyImported()) return;
+export async function importLegacyStore(legacy: LegacyStore): Promise<void> {
+  await ensureInitialized();
+  await prisma.$transaction(async (transaction) => {
+    const imported = await transaction.appState.findUniqueOrThrow({
+      where: { key: "__legacy_imported__" },
+    });
+    if (imported.value === "true") return;
+
     for (const key of STORE_KEYS) {
       if (Object.hasOwn(legacy, key)) {
         const value =
@@ -138,41 +163,57 @@ export function importLegacyStore(legacy: LegacyStore): void {
                   : {}),
               }))
             : legacy[key];
-        updateState.run(key, JSON.stringify(value));
+        const serialized = JSON.stringify(value);
+        await transaction.appState.upsert({
+          where: { key },
+          create: { key, value: serialized },
+          update: { value: serialized },
+        });
       }
     }
-    updateState.run("__legacy_imported__", "true");
+    await transaction.appState.update({
+      where: { key: "__legacy_imported__" },
+      data: { value: "true" },
+    });
   });
-  importOnce();
 }
 
-export function registerCustomer(
+export async function registerCustomer(
   name: string,
   email: string,
   password: string,
-): User | null {
-  let created: User | null = null;
-  const register = database.transaction(() => {
-    const users = readUsers();
-    if (users.some((user) => user.email.toLowerCase() === email)) return;
-    created = {
+): Promise<User | null> {
+  await ensureInitialized();
+  const created = await prisma.$transaction(async (transaction) => {
+    await transaction.$queryRaw`SELECT key FROM "AppState" WHERE key = 'usersData' FOR UPDATE`;
+    const row = await transaction.appState.findUniqueOrThrow({
+      where: { key: "usersData" },
+    });
+    const users = JSON.parse(row.value) as User[];
+    if (users.some((user) => user.email.toLowerCase() === email)) return null;
+
+    const user: User = {
       id: Date.now(),
       name,
       email,
       password: hashPassword(password),
       role: "customer",
     };
-    updateState.run("usersData", JSON.stringify([...users, created]));
+    await transaction.appState.update({
+      where: { key: "usersData" },
+      data: { value: JSON.stringify([...users, user]) },
+    });
+    return user;
   });
-  register();
   return created ? makeUserSafe(created) : null;
 }
 
-export function authenticateCustomer(
+export async function authenticateCustomer(
   email: string,
   password: string,
-): User | null {
-  const user = readUsers().find(
+): Promise<User | null> {
+  await ensureInitialized();
+  const user = (await readUsers()).find(
     (entry) => entry.email.toLowerCase() === email,
   );
   return user && verifyPassword(user.password, password)
