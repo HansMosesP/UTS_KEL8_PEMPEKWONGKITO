@@ -1,7 +1,12 @@
 import { PrismaClient } from "@prisma/client";
-import { randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
-import { DEFAULT_MENU } from "./defaults";
-import type { User } from "./types";
+import {
+  createHash,
+  randomBytes,
+  scryptSync,
+  timingSafeEqual,
+} from "node:crypto";
+import { DEFAULT_ADMIN, DEFAULT_MENU } from "./defaults";
+import type { CartItem, User } from "./types";
 
 export const STORE_KEYS = [
   "menuData",
@@ -19,8 +24,8 @@ export const WRITABLE_STORE_KEYS = [
 
 export type StoreKey = (typeof STORE_KEYS)[number];
 export type WritableStoreKey = (typeof WRITABLE_STORE_KEYS)[number];
-export type LegacyStore = Partial<Record<StoreKey, unknown>>;
 export type StoreSnapshot = Record<StoreKey, unknown>;
+export type BrowserSession = { cart: CartItem[]; user: User | null };
 
 const globalForPrisma = globalThis as typeof globalThis & {
   prisma?: PrismaClient;
@@ -46,10 +51,6 @@ async function ensureInitialized(): Promise<void> {
           key,
           value: JSON.stringify(value),
         })),
-        skipDuplicates: true,
-      });
-      await prisma.appState.createMany({
-        data: [{ key: "__legacy_imported__", value: "false" }],
         skipDuplicates: true,
       });
     })().catch((error: unknown) => {
@@ -86,10 +87,7 @@ function verifyPassword(stored: string | undefined, password: string): boolean {
   return expected.length === actual.length && timingSafeEqual(expected, actual);
 }
 
-async function upsertStoreValue(
-  key: StoreKey | "__legacy_imported__",
-  value: unknown,
-): Promise<void> {
+async function upsertStoreValue(key: StoreKey, value: unknown): Promise<void> {
   const serialized = typeof value === "string" ? value : JSON.stringify(value);
   await prisma.appState.upsert({
     where: { key },
@@ -128,54 +126,12 @@ export async function getStoreSnapshot(): Promise<StoreSnapshot> {
   ) as StoreSnapshot;
 }
 
-export async function isLegacyImported(): Promise<boolean> {
-  await ensureInitialized();
-  const row = await prisma.appState.findUnique({
-    where: { key: "__legacy_imported__" },
-  });
-  return row?.value === "true";
-}
-
 export async function saveStoreValue(
   key: WritableStoreKey,
   value: unknown,
 ): Promise<void> {
   await ensureInitialized();
   await upsertStoreValue(key, value);
-}
-
-export async function importLegacyStore(legacy: LegacyStore): Promise<void> {
-  await ensureInitialized();
-  await prisma.$transaction(async (transaction) => {
-    const imported = await transaction.appState.findUniqueOrThrow({
-      where: { key: "__legacy_imported__" },
-    });
-    if (imported.value === "true") return;
-
-    for (const key of STORE_KEYS) {
-      if (Object.hasOwn(legacy, key)) {
-        const value =
-          key === "usersData" && Array.isArray(legacy[key])
-            ? (legacy[key] as User[]).map((user) => ({
-                ...user,
-                ...(user.password
-                  ? { password: hashPassword(user.password) }
-                  : {}),
-              }))
-            : legacy[key];
-        const serialized = JSON.stringify(value);
-        await transaction.appState.upsert({
-          where: { key },
-          create: { key, value: serialized },
-          update: { value: serialized },
-        });
-      }
-    }
-    await transaction.appState.update({
-      where: { key: "__legacy_imported__" },
-      data: { value: "true" },
-    });
-  });
 }
 
 export async function registerCustomer(
@@ -213,10 +169,51 @@ export async function authenticateCustomer(
   password: string,
 ): Promise<User | null> {
   await ensureInitialized();
+  if (email === DEFAULT_ADMIN.email && password === DEFAULT_ADMIN.password) {
+    return makeUserSafe(DEFAULT_ADMIN);
+  }
   const user = (await readUsers()).find(
     (entry) => entry.email.toLowerCase() === email,
   );
   return user && verifyPassword(user.password, password)
     ? makeUserSafe(user)
     : null;
+}
+
+function sessionKey(token: string): string {
+  return `browser_session_${createHash("sha256").update(token).digest("hex")}`;
+}
+
+export function createBrowserSessionToken(): string {
+  return randomBytes(32).toString("base64url");
+}
+
+export async function getBrowserSession(
+  token: string,
+): Promise<BrowserSession | null> {
+  await ensureInitialized();
+  const row = await prisma.appState.findUnique({
+    where: { key: sessionKey(token) },
+  });
+  return row ? (JSON.parse(row.value) as BrowserSession) : null;
+}
+
+export async function saveBrowserSession(
+  token: string,
+  session: BrowserSession,
+): Promise<void> {
+  await ensureInitialized();
+  await prisma.appState.upsert({
+    where: { key: sessionKey(token) },
+    create: {
+      key: sessionKey(token),
+      value: JSON.stringify(session),
+    },
+    update: { value: JSON.stringify(session) },
+  });
+}
+
+export async function deleteBrowserSession(token: string): Promise<void> {
+  await ensureInitialized();
+  await prisma.appState.deleteMany({ where: { key: sessionKey(token) } });
 }

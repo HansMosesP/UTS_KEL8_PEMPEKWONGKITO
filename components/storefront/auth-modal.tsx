@@ -2,7 +2,6 @@
 
 import { useState, type FormEvent } from "react";
 import Swal from "sweetalert2";
-import { DEFAULT_ADMIN } from "../../lib/defaults";
 import { useStore } from "../../lib/store";
 import type { User } from "../../lib/types";
 import Modal from "../shared/modal";
@@ -36,23 +35,16 @@ export default function AuthModal({
       }
     }
 
-    if (
-      mode === "login" &&
-      email === DEFAULT_ADMIN.email &&
-      password === DEFAULT_ADMIN.password
-    ) {
-      setCurrentUser(DEFAULT_ADMIN);
-      window.location.assign("/admin");
-      return;
-    }
-
     try {
       const response = await fetch("/api/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: mode,
-          name: mode === "register" ? String(data.get("name") ?? "").trim() : undefined,
+          name:
+            mode === "register"
+              ? String(data.get("name") ?? "").trim()
+              : undefined,
           email,
           password,
         }),
@@ -72,6 +64,10 @@ export default function AuthModal({
       if (mode === "register") setUsers([...users, result.user]);
       setCurrentUser(result.user);
       onClose();
+      if (result.user.role === "admin") {
+        window.location.assign("/admin");
+        return;
+      }
       void Swal.fire(
         mode === "register"
           ? {
@@ -92,7 +88,7 @@ export default function AuthModal({
       void Swal.fire({
         icon: "error",
         title: "Server tidak terhubung",
-        text: "Coba lagi setelah koneksi lokal tersedia.",
+        text: "Coba lagi setelah koneksi server tersedia.",
       });
     }
   };

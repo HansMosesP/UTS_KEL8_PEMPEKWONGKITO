@@ -25,10 +25,7 @@ export function CartModal({
   onCheckout: () => void;
 }) {
   const { cart, setCart } = useStore();
-  const [shipping, setShipping] = useState(0);
-  useEffect(() => {
-    if (open) setShipping(Number(localStorage.getItem("lastOngkir") ?? 0));
-  }, [open]);
+  const shipping = 0;
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
   const changeQty = (id: number, delta: number) =>
     setCart(
@@ -129,10 +126,7 @@ export function CheckoutModal({
   const shipping = cities[cityIndex][0];
 
   useEffect(() => {
-    if (open) {
-      setCityIndex(0);
-      localStorage.setItem("lastOngkir", String(cities[0][0]));
-    }
+    if (open) setCityIndex(0);
   }, [open]);
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
@@ -210,7 +204,6 @@ export function CheckoutModal({
           onChange={(event) => {
             const index = Number(event.target.value);
             setCityIndex(index);
-            localStorage.setItem("lastOngkir", String(cities[index][0]));
           }}
         >
           {cities.map(([price, city], index) => (

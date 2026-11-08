@@ -1,12 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import {
   authenticateCustomer,
+  createBrowserSessionToken,
+  deleteBrowserSession,
+  getBrowserSession,
   registerCustomer,
+  saveBrowserSession,
 } from "../../../lib/database";
 
 export const runtime = "nodejs";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as {
       action?: string;
@@ -44,7 +48,7 @@ export async function POST(request: Request) {
           { status: 409 },
         );
       }
-      return NextResponse.json({ user }, { status: 201 });
+      return createAuthenticatedResponse(request, user, 201);
     }
 
     if (body.action === "login") {
@@ -55,10 +59,13 @@ export async function POST(request: Request) {
           { status: 401 },
         );
       }
-      return NextResponse.json({ user });
+      return createAuthenticatedResponse(request, user);
     }
 
-    return NextResponse.json({ error: "Aksi autentikasi tidak valid." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Aksi autentikasi tidak valid." },
+      { status: 400 },
+    );
   } catch (error) {
     console.error("Authentication request failed.", error);
     return NextResponse.json(
@@ -66,4 +73,29 @@ export async function POST(request: Request) {
       { status: 500 },
     );
   }
+}
+
+async function createAuthenticatedResponse(
+  request: NextRequest,
+  user: NonNullable<Awaited<ReturnType<typeof authenticateCustomer>>>,
+  status = 200,
+) {
+  const oldToken = request.cookies.get("pwk_session")?.value;
+  const existing = oldToken ? await getBrowserSession(oldToken) : null;
+  const token = createBrowserSessionToken();
+  await saveBrowserSession(token, {
+    cart: existing?.cart ?? [],
+    user,
+  });
+  if (oldToken) await deleteBrowserSession(oldToken);
+
+  const response = NextResponse.json({ user }, { status });
+  response.cookies.set("pwk_session", token, {
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 30,
+    path: "/",
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  });
+  return response;
 }
