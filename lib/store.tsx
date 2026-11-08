@@ -71,7 +71,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     const initialize = async () => {
       try {
         const response = await fetch("/api/store", { cache: "no-store" });
-        if (!response.ok) throw new Error("Gagal membaca database SQLite");
+        if (!response.ok) throw new Error("Gagal membaca database PostgreSQL");
         let payload = (await response.json()) as StoreResponse;
         if (!payload.legacyImported) {
           const legacy = {
@@ -98,7 +98,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ legacy }),
           });
-          if (!migrated.ok) throw new Error("Gagal migrasi data ke SQLite");
+          if (!migrated.ok) throw new Error("Gagal migrasi data ke PostgreSQL");
           payload = {
             store: (await migrated.json()) as StoreResponse["store"],
             legacyImported: true,
@@ -161,7 +161,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       body: JSON.stringify({ key, value }),
     })
       .then((response) => {
-        if (!response.ok) throw new Error("Gagal menyimpan data ke SQLite");
+        if (!response.ok) throw new Error("Gagal menyimpan data ke PostgreSQL");
         channelRef.current?.postMessage(key);
       })
       .catch((error: unknown) => console.error(error));
