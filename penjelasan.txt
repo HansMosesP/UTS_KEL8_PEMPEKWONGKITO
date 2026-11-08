@@ -1,0 +1,45 @@
+PENJELASAN PRESENTASI
+Pempek Wong Kito
+
+SECTION 1 — PEMBUKAAN
+Pempek Wong Kito adalah aplikasi web untuk memperkenalkan produk pempek khas Palembang dan membantu pelanggan melakukan pemesanan secara online. Aplikasi menyediakan halaman toko untuk pelanggan serta panel admin untuk mengelola konten dan pesanan.
+
+SECTION 2 — HALAMAN BERANDA
+Halaman beranda menampilkan identitas usaha, cerita, keunggulan produk, anatomi atau bahan pempek, menu, testimoni, galeri, dan informasi lokasi. Bagian-bagian ini membantu pengunjung mengenal produk sebelum membeli.
+
+SECTION 3 — MENU DAN KERANJANG
+Pelanggan dapat melihat daftar menu, menambahkan produk ke keranjang, mengubah jumlah, dan menghapus item. Data keranjang disimpan di PostgreSQL melalui API, sehingga tidak bergantung pada localStorage browser.
+
+SECTION 4 — CHECKOUT DAN PESANAN
+Saat checkout, pelanggan mengisi data penerima, memilih kota tujuan dan metode pembayaran, lalu mengirim pesanan. Aplikasi menyimpan rincian item, subtotal, ongkos kirim, total, serta status pesanan agar dapat dipantau oleh admin dan pelanggan.
+
+SECTION 5 — AKUN PELANGGAN
+Pelanggan dapat mendaftar dan masuk menggunakan email serta kata sandi. Kata sandi pelanggan disimpan sebagai hash, bukan sebagai teks biasa. Status login dikelola di server; browser hanya menerima cookie httpOnly sebagai pengenal sesi.
+
+SECTION 6 — PANEL ADMIN
+Panel admin memiliki beberapa bagian:
+- Dashboard: ringkasan jumlah pesanan, pendapatan, produk terlaris, dan pelanggan.
+- Kelola Menu: menambah, mengubah, dan menghapus produk.
+- Kelola Pesanan: melihat pesanan, mengubah status, dan menghapus pesanan.
+- Edit Teks Website: memperbarui tulisan di halaman beranda tanpa mengubah source code.
+- Notifikasi: menampilkan pembaruan terkait pesanan.
+
+SECTION 7 — PENYIMPANAN DATA
+Data aplikasi disimpan di PostgreSQL dan diakses menggunakan Prisma. Model AppState menyimpan data aplikasi dalam bentuk JSON untuk menu, pengguna, pesanan, teks website, notifikasi, dan sesi browser. URL database dikonfigurasi melalui DATABASE_URL di environment, bukan ditulis langsung di source code.
+
+SECTION 8 — TEKNOLOGI
+- Next.js dan React: membangun halaman, komponen, dan API.
+- TypeScript: membantu menjaga konsistensi tipe data.
+- Prisma: menghubungkan aplikasi dengan PostgreSQL.
+- Bootstrap dan CSS: membantu menyusun tata letak serta tampilan responsif.
+
+SECTION 9 — ALUR DEMONSTRASI
+1. Tampilkan halaman beranda dan jelaskan bagian-bagian utama.
+2. Pilih menu, tambahkan ke keranjang, lalu tunjukkan perubahan jumlah item.
+3. Isi checkout dan kirim contoh pesanan.
+4. Masuk ke panel admin untuk melihat pesanan dan mengubah statusnya.
+5. Tunjukkan pengelolaan menu serta pengubahan teks website.
+6. Jelaskan bahwa data tersimpan di PostgreSQL melalui Prisma.
+
+SECTION 10 — PENUTUP
+Aplikasi menggabungkan katalog produk, pemesanan, akun pelanggan, dan pengelolaan admin dalam satu sistem. Penyimpanan terpusat di PostgreSQL membuat data dapat digunakan oleh aplikasi yang berjalan di lebih dari satu perangkat atau instance server.
