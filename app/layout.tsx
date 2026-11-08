@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { StoreProvider } from "../lib/store";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../style.css";
+import "../global.css";
 import "sweetalert2/dist/sweetalert2.min.css";
 
 export const metadata: Metadata = {

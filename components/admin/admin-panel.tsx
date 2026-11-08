@@ -885,9 +885,11 @@ export default function AdminPanel() {
 
   if (!ready || currentUser?.role !== "admin")
     return (
-      <main className="admin-loading">
-        <p>Memeriksa akses admin...</p>
-      </main>
+      <div className="admin-app">
+        <main className="admin-loading">
+          <p>Memeriksa akses admin...</p>
+        </main>
+      </div>
     );
   return (
     <div className="admin-app">
