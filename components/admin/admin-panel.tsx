@@ -14,12 +14,7 @@ import {
   X,
 } from "lucide-react";
 import Swal from "sweetalert2";
-import {
-  DEFAULT_ADMIN,
-  DEFAULT_MENU,
-  SITE_TEXT_DEFAULTS,
-  SITE_TEXT_FIELDS,
-} from "../../lib/defaults";
+import { SITE_TEXT_DEFAULTS, SITE_TEXT_FIELDS } from "../../lib/defaults";
 import { useStore } from "../../lib/store";
 import type { MenuItem, Order, OrderStatus, SiteTexts } from "../../lib/types";
 
