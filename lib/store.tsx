@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -9,32 +10,53 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { DEFAULT_MENU } from "./defaults";
+import Swal from "sweetalert2";
+import {
+  DEFAULT_ANATOMY,
+  DEFAULT_FAQS,
+  DEFAULT_FEATURES,
+  DEFAULT_GALLERY,
+  DEFAULT_IMAGES,
+  DEFAULT_MENU,
+  DEFAULT_PAYMENTS,
+  DEFAULT_SETTINGS,
+  DEFAULT_SHIPPING,
+  DEFAULT_TESTIMONIALS,
+} from "./defaults";
 import type {
+  AnatomyItem,
   AppStore,
   CartItem,
+  ContentKey,
+  ContentValue,
+  FaqItem,
+  FeatureItem,
+  GalleryItem,
   MenuItem,
   Notification,
   Order,
+  PaymentMethod,
+  ShippingCity,
+  SiteImages,
+  SiteSettings,
   SiteTexts,
+  Testimonial,
   User,
 } from "./types";
 
 const StoreContext = createContext<AppStore | null>(null);
+const CHANNEL = "pempek-wong-kito-store";
+const ADMIN_POLL_MS = 15000;
 
 type StoreResponse = {
-  store: {
-    menuData: MenuItem[];
+  user: User | null;
+  /** Keranjang browser ini (tersimpan di PostgreSQL): hanya id menu + jumlah. */
+  cart: { id: number; qty: number }[];
+  store: ContentValue & {
     usersData: User[];
     ordersData: Order[];
-    siteTexts: SiteTexts;
     adminNotifs: Notification[];
   };
-};
-
-type SessionResponse = {
-  cart: CartItem[];
-  user: User | null;
 };
 
 function normalizeMenu(items: MenuItem[]) {
@@ -46,74 +68,141 @@ function normalizeMenu(items: MenuItem[]) {
   }));
 }
 
+async function api<T = { ok: true }>(
+  url: string,
+  init?: RequestInit,
+): Promise<T> {
+  const response = await fetch(url, {
+    cache: "no-store",
+    headers: { "Content-Type": "application/json" },
+    ...init,
+  });
+  const data = (await response.json().catch(() => ({}))) as T & { error?: string };
+  if (!response.ok) throw new Error(data.error ?? "Permintaan gagal diproses.");
+  return data;
+}
+
+const showError = (title: string, error: unknown) =>
+  void Swal.fire({
+    icon: "error",
+    title,
+    text: error instanceof Error ? error.message : "Server tidak dapat dihubungi.",
+  });
+
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
-  const [menu, setMenuState] = useState<MenuItem[]>(DEFAULT_MENU);
+  const [menu, setMenu] = useState<MenuItem[]>(DEFAULT_MENU);
   const [cart, setCartState] = useState<CartItem[]>([]);
-  const [users, setUsersState] = useState<User[]>([]);
-  const [orders, setOrdersState] = useState<Order[]>([]);
-  const [currentUser, setCurrentUserState] = useState<User | null>(null);
-  const [siteTexts, setSiteTextsState] = useState<SiteTexts>({});
-  const [notifications, setNotificationsState] = useState<Notification[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [siteTexts, setSiteTexts] = useState<SiteTexts>({});
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [faqs, setFaqs] = useState<FaqItem[]>(DEFAULT_FAQS);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(DEFAULT_TESTIMONIALS);
+  const [settings, setSettings] = useState<SiteSettings>(DEFAULT_SETTINGS);
+  const [anatomy, setAnatomy] = useState<AnatomyItem[]>(DEFAULT_ANATOMY);
+  const [features, setFeatures] = useState<FeatureItem[]>(DEFAULT_FEATURES);
+  const [gallery, setGallery] = useState<GalleryItem[]>(DEFAULT_GALLERY);
+  const [images, setImages] = useState<SiteImages>(DEFAULT_IMAGES);
+  const [shippingCities, setShippingCities] = useState<ShippingCity[]>(DEFAULT_SHIPPING);
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>(DEFAULT_PAYMENTS);
   const channelRef = useRef<BroadcastChannel | null>(null);
+  const cartRef = useRef<CartItem[]>([]);
 
-  const refreshStore = async () => {
-    const [storeResponse, sessionResponse] = await Promise.all([
-      fetch("/api/store", { cache: "no-store" }),
-      fetch("/api/session", { cache: "no-store" }),
-    ]);
-    if (!storeResponse.ok || !sessionResponse.ok) {
-      throw new Error("Gagal membaca data dari PostgreSQL");
+  const replaceCart = useCallback((next: CartItem[]) => {
+    cartRef.current = next;
+    setCartState(next);
+  }, []);
+
+  const apply = useCallback((payload: StoreResponse) => {
+    const { store } = payload;
+    const nextMenu = normalizeMenu(store.menuData);
+    setCurrentUser(payload.user);
+    setMenu(nextMenu);
+    // Nama, harga & gambar keranjang selalu diambil dari menu terbaru.
+    replaceCart(
+      payload.cart.flatMap(({ id, qty }) => {
+        const item = nextMenu.find((entry) => entry.id === id);
+        return item ? [{ ...item, qty }] : [];
+      }),
+    );
+    setUsers(store.usersData);
+    setOrders(store.ordersData);
+    setSiteTexts(store.siteTexts);
+    setNotifications(store.adminNotifs);
+    setFaqs(store.faqData);
+    setTestimonials(store.testimoniData);
+    setSettings(store.siteSettings);
+    setAnatomy(store.anatomyData);
+    setFeatures(store.featureData);
+    setGallery(store.galleryData);
+    setImages(store.siteImages);
+    setShippingCities(store.shippingData);
+    setPaymentMethods(store.paymentData);
+  }, [replaceCart]);
+
+  const refresh = useCallback(async () => {
+    try {
+      apply(await api<StoreResponse>("/api/store"));
+    } catch (error) {
+      console.error(error);
     }
-    const payload = (await storeResponse.json()) as StoreResponse;
-    const session = (await sessionResponse.json()) as SessionResponse;
-    setMenuState(normalizeMenu(payload.store.menuData));
-    setUsersState(payload.store.usersData);
-    setOrdersState(payload.store.ordersData);
-    setSiteTextsState(payload.store.siteTexts);
-    setNotificationsState(payload.store.adminNotifs);
-    setCartState(session.cart);
-    setCurrentUserState(session.user);
-  };
+  }, [apply]);
+
+  const broadcast = () => channelRef.current?.postMessage("changed");
 
   useEffect(() => {
     let active = true;
-    void refreshStore()
-      .catch((error: unknown) => {
+    (async () => {
+      try {
+        const payload = await api<StoreResponse>("/api/store");
+        if (active) apply(payload);
+      } catch (error) {
         console.error(error);
-      })
-      .finally(() => {
-        if (active) setReady(true);
-      });
+      }
+      if (active) setReady(true);
+    })();
     return () => {
       active = false;
     };
-  }, []);
+  }, [apply]);
 
+  // Sinkron antar-tab di browser yang sama (konten, login, dan keranjang).
   useEffect(() => {
     if (typeof BroadcastChannel === "undefined") return;
-    channelRef.current = new BroadcastChannel("pempek-wong-kito-store");
-    channelRef.current.onmessage = () => {
-      void refreshStore().catch((error: unknown) => console.error(error));
-    };
+    const channel = new BroadcastChannel(CHANNEL);
+    channel.onmessage = () => void refresh();
+    channelRef.current = channel;
     return () => {
-      channelRef.current?.close();
+      channel.close();
       channelRef.current = null;
     };
-  }, []);
+  }, [refresh]);
 
-  const persistShared = (key: string, value: unknown) => {
-    void fetch("/api/store", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ key, value }),
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error("Gagal menyimpan data ke PostgreSQL");
-        channelRef.current?.postMessage(key);
+  // Admin: ambil pesanan baru dari perangkat lain secara berkala.
+  useEffect(() => {
+    if (currentUser?.role !== "admin") return;
+    const timer = window.setInterval(() => {
+      if (document.visibilityState === "visible") void refresh();
+    }, ADMIN_POLL_MS);
+    return () => window.clearInterval(timer);
+  }, [currentUser?.role, refresh]);
+
+  /** Ubah keranjang: tampil langsung, lalu disimpan ke PostgreSQL lewat /api/session. */
+  const setCart = useCallback<AppStore["setCart"]>(
+    (next) => {
+      const value = typeof next === "function" ? next(cartRef.current) : next;
+      replaceCart(value);
+      api("/api/session", {
+        method: "PUT",
+        body: JSON.stringify({ cart: value.map(({ id, qty }) => ({ id, qty })) }),
       })
-      .catch((error: unknown) => console.error(error));
-  };
+        .then(() => channelRef.current?.postMessage("changed"))
+        .catch((error: unknown) => console.error(error));
+    },
+    [replaceCart],
+  );
 
   const value = useMemo<AppStore>(
     () => ({
@@ -125,55 +214,142 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       currentUser,
       siteTexts,
       notifications,
-      setMenu: (next) => {
-        setMenuState(next);
-        persistShared("menuData", next);
-      },
-      setCart: (next) => {
-        setCartState(next);
-        void fetch("/api/session", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ cart: next }),
-        })
-          .then((response) => {
-            if (!response.ok)
-              throw new Error("Gagal menyimpan keranjang ke PostgreSQL");
-            channelRef.current?.postMessage("session");
-          })
-          .catch((error: unknown) => console.error(error));
-      },
-      setUsers: setUsersState,
-      setOrders: (next) => {
-        setOrdersState(next);
-        persistShared("ordersData", next);
-      },
-      setCurrentUser: (next) => {
-        setCurrentUserState(next);
-        if (next === null) {
-          void fetch("/api/session", { method: "DELETE" })
-            .then((response) => {
-              if (!response.ok) throw new Error("Gagal mengakhiri sesi");
-              channelRef.current?.postMessage("session");
-            })
-            .catch((error: unknown) => console.error(error));
+      faqs,
+      testimonials,
+      settings,
+      anatomy,
+      features,
+      gallery,
+      images,
+      shippingCities,
+      paymentMethods,
+      setCart,
+      refresh,
+      authenticate: async (mode, data) => {
+        try {
+          const result = await api<{ user: User }>("/api/auth", {
+            method: "POST",
+            body: JSON.stringify({ action: mode, ...data }),
+          });
+          await refresh();
+          broadcast();
+          return { ok: true, user: result.user };
+        } catch (error) {
+          return {
+            ok: false,
+            error: error instanceof Error ? error.message : "Server tidak terhubung.",
+          };
         }
       },
-      setSiteTexts: (next) => {
-        setSiteTextsState(next);
-        persistShared("siteTexts", next);
+      logout: async () => {
+        try {
+          await api("/api/auth", {
+            method: "POST",
+            body: JSON.stringify({ action: "logout" }),
+          });
+        } catch (error) {
+          console.error(error);
+        }
+        // Sesi (beserta keranjangnya) sudah dihapus di server.
+        replaceCart([]);
+        setCurrentUser(null);
+        await refresh();
+        broadcast();
       },
-      setNotifications: (next) => {
-        setNotificationsState(next);
-        persistShared("adminNotifs", next);
+      saveContent: async <K extends ContentKey>(key: K, next: ContentValue[K]) => {
+        try {
+          await api("/api/store", {
+            method: "PUT",
+            body: JSON.stringify({ key, value: next }),
+          });
+          await refresh();
+          broadcast();
+          return true;
+        } catch (error) {
+          showError("Gagal menyimpan", error);
+          await refresh();
+          return false;
+        }
+      },
+      placeOrder: async (payload) => {
+        const { order } = await api<{ order: Order }>("/api/orders", {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
+        // Server sudah mengosongkan keranjang di sesi.
+        replaceCart([]);
+        await refresh();
+        broadcast();
+        return order;
+      },
+      updateOrderStatus: async (id, status) => {
+        try {
+          await api("/api/orders", {
+            method: "PATCH",
+            body: JSON.stringify({ id, status }),
+          });
+          await refresh();
+          broadcast();
+          return true;
+        } catch (error) {
+          showError("Status gagal diubah", error);
+          await refresh();
+          return false;
+        }
+      },
+      deleteOrder: async (id) => {
+        try {
+          await api(`/api/orders?id=${encodeURIComponent(id)}`, { method: "DELETE" });
+          await refresh();
+          broadcast();
+          return true;
+        } catch (error) {
+          showError("Pesanan gagal dihapus", error);
+          return false;
+        }
+      },
+      markNotificationsRead: async (ids) => {
+        setNotifications((items) =>
+          items.map((item) =>
+            ids === "all" || ids.includes(item.id) ? { ...item, read: true } : item,
+          ),
+        );
+        try {
+          await api("/api/notifications", {
+            method: "PATCH",
+            body: JSON.stringify({ ids }),
+          });
+          broadcast();
+        } catch (error) {
+          console.error(error);
+          await refresh();
+        }
       },
     }),
-    [ready, menu, cart, users, orders, currentUser, siteTexts, notifications],
+    [
+      ready,
+      menu,
+      cart,
+      users,
+      orders,
+      currentUser,
+      siteTexts,
+      notifications,
+      faqs,
+      testimonials,
+      settings,
+      anatomy,
+      features,
+      gallery,
+      images,
+      shippingCities,
+      paymentMethods,
+      setCart,
+      refresh,
+    ],
   );
 
-  return (
-    <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
-  );
+  return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 }
 
 export function useStore() {

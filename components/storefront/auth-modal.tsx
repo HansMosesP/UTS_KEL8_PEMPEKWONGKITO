@@ -1,96 +1,76 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import Swal from "sweetalert2";
 import { useStore } from "../../lib/store";
-import type { User } from "../../lib/types";
+import type { AuthMode, User } from "../../lib/types";
 import Modal from "../shared/modal";
 
 export default function AuthModal({
   open,
+  initialMode = "login",
+  notice,
   onClose,
+  onSuccess,
 }: {
   open: boolean;
+  initialMode?: AuthMode;
+  /** Pesan tambahan, mis. "Silakan masuk dulu untuk memesan." */
+  notice?: string;
   onClose: () => void;
+  onSuccess?: (user: User) => void;
 }) {
-  const { users, setUsers, setCurrentUser } = useStore();
-  const [mode, setMode] = useState<"login" | "register">("login");
+  const { authenticate } = useStore();
+  const [mode, setMode] = useState<AuthMode>(initialMode);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (open) setMode(initialMode);
+  }, [open, initialMode]);
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const email = String(data.get("email") ?? "")
-      .trim()
-      .toLowerCase();
+    const name = String(data.get("name") ?? "").trim();
+    const email = String(data.get("email") ?? "").trim().toLowerCase();
     const password = String(data.get("password") ?? "");
-    if (mode === "register") {
-      const name = String(data.get("name") ?? "").trim();
-      if (!name || !email || password.length < 6) {
-        void Swal.fire({
-          icon: "warning",
-          title: "Data belum lengkap",
-          text: "Isi semua kolom. Password minimal 6 karakter.",
-        });
-        return;
-      }
+    if (mode === "register" && (!name || password.length < 6)) {
+      void Swal.fire({
+        icon: "warning",
+        title: "Data belum lengkap",
+        text: "Isi semua kolom. Password minimal 6 karakter.",
+      });
+      return;
     }
 
-    try {
-      const response = await fetch("/api/auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: mode,
-          name:
-            mode === "register"
-              ? String(data.get("name") ?? "").trim()
-              : undefined,
-          email,
-          password,
-        }),
-      });
-      const result = (await response.json()) as {
-        user?: User;
-        error?: string;
-      };
-      if (!response.ok || !result.user) {
-        void Swal.fire({
-          icon: "error",
-          title: mode === "register" ? "Pendaftaran gagal" : "Login gagal",
-          text: result.error ?? "Permintaan tidak dapat diproses.",
-        });
-        return;
-      }
-      if (mode === "register") setUsers([...users, result.user]);
-      setCurrentUser(result.user);
-      onClose();
-      if (result.user.role === "admin") {
-        window.location.assign("/admin");
-        return;
-      }
-      void Swal.fire(
-        mode === "register"
-          ? {
-              icon: "success",
-              title: "Pendaftaran berhasil!",
-              text: `Selamat datang, ${result.user.name}!`,
-            }
-          : {
-              toast: true,
-              position: "top-end",
-              timer: 2200,
-              showConfirmButton: false,
-              icon: "success",
-              title: `Selamat datang, ${result.user.name}!`,
-            },
-      );
-    } catch {
+    setBusy(true);
+    const result = await authenticate(mode, { name, email, password });
+    setBusy(false);
+    if (!result.ok) {
       void Swal.fire({
         icon: "error",
-        title: "Server tidak terhubung",
-        text: "Coba lagi setelah koneksi server tersedia.",
+        title: mode === "register" ? "Pendaftaran gagal" : "Login gagal",
+        text: result.error,
       });
+      return;
     }
+    onClose();
+    if (result.user.role === "admin") {
+      window.location.assign("/admin");
+      return;
+    }
+    void Swal.fire({
+      toast: true,
+      position: "top-end",
+      timer: 2200,
+      showConfirmButton: false,
+      icon: "success",
+      title:
+        mode === "register"
+          ? `Pendaftaran berhasil! Selamat datang, ${result.user.name}`
+          : `Selamat datang, ${result.user.name}!`,
+    });
+    onSuccess?.(result.user);
   };
 
   return (
@@ -104,7 +84,8 @@ export default function AuthModal({
           ? "Selamat datang kembali di Pempek Wong Kito"
           : "Buat akun untuk mulai pesan pempek"}
       </p>
-      <form onSubmit={submit} className="auth-form">
+      {notice && <p className="auth-notice">{notice}</p>}
+      <form onSubmit={submit} className="auth-form" key={mode}>
         {mode === "register" && (
           <input
             className="form-control"
@@ -112,6 +93,7 @@ export default function AuthModal({
             type="text"
             placeholder="Nama Lengkap"
             autoComplete="name"
+            maxLength={120}
             required
           />
         )}
@@ -132,13 +114,14 @@ export default function AuthModal({
           minLength={mode === "register" ? 6 : undefined}
           required
         />
-        <button className="btn btn-primary" type="submit">
-          {mode === "login" ? "Masuk" : "Daftar"}
+        <button className="btn btn-primary" type="submit" disabled={busy}>
+          {busy ? "Memproses..." : mode === "login" ? "Masuk" : "Daftar"}
         </button>
       </form>
       <p className="auth-switch">
         {mode === "login" ? "Belum punya akun? " : "Sudah punya akun? "}
         <button
+          type="button"
           onClick={() => setMode(mode === "login" ? "register" : "login")}
         >
           {mode === "login" ? "Daftar" : "Masuk"}
