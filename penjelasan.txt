@@ -5,27 +5,37 @@ SECTION 1 — PEMBUKAAN
 Pempek Wong Kito adalah aplikasi web untuk memperkenalkan produk pempek khas Palembang dan membantu pelanggan melakukan pemesanan secara online. Aplikasi menyediakan halaman toko untuk pelanggan serta panel admin untuk mengelola konten dan pesanan.
 
 SECTION 2 — HALAMAN BERANDA
-Halaman beranda menampilkan identitas usaha, cerita, keunggulan produk, anatomi atau bahan pempek, menu, testimoni, galeri, dan informasi lokasi. Bagian-bagian ini membantu pengunjung mengenal produk sebelum membeli.
+Halaman beranda menampilkan identitas usaha, menu favorit, daftar menu, anatomi pempek, cerita usaha, keunggulan produk, testimoni, galeri, FAQ, serta informasi lokasi dan kontak. Bagian-bagian ini membantu pengunjung mengenal produk sebelum membeli.
+- Anatomi Pempek bersifat interaktif: pengunjung mengklik bagian pempek (kulit luar, adonan ikan, tapioka/sagu, isian telur, cuko, pelengkap) untuk melihat penjelasannya, atau berpindah bagian dengan tombol panah.
+- Cerita Kami menampilkan kisah usaha "Dari Sungai Musi ke Meja Makan Anda".
+- Kartu Keunggulan menampilkan foto produk beserta alasan memilih Wong Kito.
+- Lokasi menampilkan peta Google Maps dan tombol WhatsApp untuk bertanya atau memesan.
+Semua teks, foto, dan daftar di beranda dapat diubah oleh admin tanpa mengubah source code.
 
 SECTION 3 — MENU DAN KERANJANG
-Pelanggan dapat melihat daftar menu, menambahkan produk ke keranjang, mengubah jumlah, dan menghapus item. Data keranjang disimpan di PostgreSQL melalui API, sehingga tidak bergantung pada localStorage browser.
+Pelanggan dapat melihat daftar menu, menambahkan produk ke keranjang, mengubah jumlah, dan menghapus item. Data keranjang disimpan di PostgreSQL melalui API, sehingga tidak bergantung pada localStorage browser. Yang disimpan hanya id menu dan jumlahnya, sehingga nama dan harga di keranjang selalu mengikuti menu terbaru. Isi keranjang tetap terbawa ketika pelanggan login.
 
 SECTION 4 — CHECKOUT DAN PESANAN
-Saat checkout, pelanggan mengisi data penerima, memilih kota tujuan dan metode pembayaran, lalu mengirim pesanan. Aplikasi menyimpan rincian item, subtotal, ongkos kirim, total, serta status pesanan agar dapat dipantau oleh admin dan pelanggan.
+Pelanggan harus login sebelum checkout. Saat checkout, pelanggan mengisi data penerima, memilih kota tujuan dan metode pembayaran, lalu mengirim pesanan. Daftar kota beserta ongkos kirim dan metode pembayaran diatur oleh admin. Harga dan ongkos kirim dihitung ulang di server sehingga tidak dapat dimanipulasi dari browser. Aplikasi menyimpan rincian item, subtotal, ongkos kirim, total, serta status pesanan agar dapat dipantau oleh admin dan oleh pelanggan di halaman "Pesanan Anda".
 
 SECTION 5 — AKUN PELANGGAN
-Pelanggan dapat mendaftar dan masuk menggunakan email serta kata sandi. Kata sandi pelanggan disimpan sebagai hash, bukan sebagai teks biasa. Status login dikelola di server; browser hanya menerima cookie httpOnly sebagai pengenal sesi.
+Pelanggan dapat mendaftar dan masuk menggunakan email serta kata sandi. Kata sandi pelanggan disimpan sebagai hash, bukan sebagai teks biasa. Status login dikelola di server; browser hanya menerima cookie httpOnly sebagai pengenal sesi. Token sesi dibuat baru setiap kali login dan berlaku selama 7 hari. Akun admin juga tersimpan di database dengan kata sandi yang di-hash.
 
 SECTION 6 — PANEL ADMIN
-Panel admin memiliki beberapa bagian:
-- Dashboard: ringkasan jumlah pesanan, pendapatan, produk terlaris, dan pelanggan.
-- Kelola Menu: menambah, mengubah, dan menghapus produk.
-- Kelola Pesanan: melihat pesanan, mengubah status, dan menghapus pesanan.
+Panel admin hanya dapat dibuka oleh akun admin. Menu panel disusun dalam dua baris:
+- Dashboard: ringkasan pesanan hari ini, pendapatan hari ini, menu terlaris, dan jumlah pelanggan, ditambah statistik status pesanan, top menu, dan pesanan terbaru.
+- Pesanan: mencari pesanan, melihat rinciannya, mengubah status (Menunggu, Diproses, Dikirim, Selesai, Dibatalkan), dan menghapus pesanan.
+- Pelanggan: daftar pelanggan beserta jumlah pesanan dan total belanja; dapat dicari, difilter (pernah/belum transaksi), diurutkan, dan diekspor ke CSV.
+- Kelola Menu: menambah, mengubah, dan menghapus produk, termasuk mengunggah foto menu.
+- Konten Halaman: mengatur daftar Anatomi Pempek, Kartu Keunggulan, Testimoni (dengan rating bintang), dan FAQ.
+- Gambar & Galeri: mengganti foto-foto di halaman beranda dan mengatur foto galeri.
+- Ongkir & Pembayaran: mengatur daftar kota beserta ongkos kirim, serta metode pembayaran.
+- Peta & Kontak: mengatur peta Google Maps dan nomor WhatsApp toko.
 - Edit Teks Website: memperbarui tulisan di halaman beranda tanpa mengubah source code.
-- Notifikasi: menampilkan pembaruan terkait pesanan.
+- Notifikasi: ikon lonceng menampilkan pesanan baru dan perubahan status. Pesanan dari perangkat lain diperiksa otomatis setiap 15 detik.
 
 SECTION 7 — PENYIMPANAN DATA
-Data aplikasi disimpan di PostgreSQL dan diakses menggunakan Prisma. Model AppState menyimpan data aplikasi dalam bentuk JSON untuk menu, pengguna, pesanan, teks website, notifikasi, dan sesi browser. URL database dikonfigurasi melalui DATABASE_URL di environment, bukan ditulis langsung di source code.
+Data aplikasi disimpan di PostgreSQL dan diakses menggunakan Prisma. Model AppState menyimpan data aplikasi dalam bentuk JSON untuk menu, pengguna, pesanan, teks website, notifikasi, konten halaman (anatomi, keunggulan, testimoni, FAQ, galeri, gambar, ongkir, pembayaran, peta dan kontak), sesi browser, serta foto yang diunggah admin. Proses yang mengubah data penting, seperti pesanan baru dan perubahan status, dijalankan di dalam transaksi dengan penguncian baris (SELECT ... FOR UPDATE) agar dua permintaan bersamaan tidak saling menimpa. URL database dikonfigurasi melalui DATABASE_URL di environment, bukan ditulis langsung di source code.
 
 SECTION 8 — TEKNOLOGI
 - Next.js dan React: membangun halaman, komponen, dan API.
@@ -34,12 +44,14 @@ SECTION 8 — TEKNOLOGI
 - Bootstrap dan CSS: membantu menyusun tata letak serta tampilan responsif.
 
 SECTION 9 — ALUR DEMONSTRASI
-1. Tampilkan halaman beranda dan jelaskan bagian-bagian utama.
-2. Pilih menu, tambahkan ke keranjang, lalu tunjukkan perubahan jumlah item.
-3. Isi checkout dan kirim contoh pesanan.
-4. Masuk ke panel admin untuk melihat pesanan dan mengubah statusnya.
-5. Tunjukkan pengelolaan menu serta pengubahan teks website.
-6. Jelaskan bahwa data tersimpan di PostgreSQL melalui Prisma.
+1. Tampilkan halaman beranda dan jelaskan bagian-bagian utama, termasuk Anatomi Pempek yang dapat diklik.
+2. Daftar atau masuk sebagai pelanggan.
+3. Pilih menu, tambahkan ke keranjang, lalu tunjukkan perubahan jumlah item.
+4. Isi checkout dan kirim contoh pesanan, lalu tunjukkan pesanan tersebut di halaman "Pesanan Anda".
+5. Masuk ke panel admin, tunjukkan notifikasi pesanan baru dan ringkasan di Dashboard, lalu ubah status pesanan di tab Pesanan.
+6. Tunjukkan tab Pelanggan, termasuk pencarian dan ekspor CSV.
+7. Ubah konten, misalnya foto galeri, kartu keunggulan, atau teks website, lalu tunjukkan perubahannya di beranda.
+8. Jelaskan bahwa data tersimpan di PostgreSQL melalui Prisma.
 
 SECTION 10 — PENUTUP
 Aplikasi menggabungkan katalog produk, pemesanan, akun pelanggan, dan pengelolaan admin dalam satu sistem. Penyimpanan terpusat di PostgreSQL membuat data dapat digunakan oleh aplikasi yang berjalan di lebih dari satu perangkat atau instance server.
