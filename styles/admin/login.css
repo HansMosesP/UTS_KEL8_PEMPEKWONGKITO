@@ -1,0 +1,7 @@
+.admin-app .admin-login { display: grid; gap: 12px; width: min(400px, 92vw); text-align: center; }
+
+.admin-app .admin-login .admin-logo-img { margin: 0 auto; }
+
+.admin-app .admin-login h2::after { left: 50%; transform: translateX(-50%); }
+
+.admin-app .admin-back { color: var(--teks-lembut); font-size: 13.5px; }

@@ -1,0 +1,84 @@
+/* TESTIMONI */
+.testimoni-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.testimoni-card {
+  background: var(--kertas);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--garis);
+  padding: 30px 28px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.testimoni-card::before {
+  content: "\201C";
+  position: absolute;
+  top: 12px;
+  right: 22px;
+  font-family: var(--font-display);
+  font-size: 72px;
+  line-height: 1;
+  color: var(--kunyit);
+  opacity: 0.25;
+}
+
+.testimoni-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-card);
+  border-color: var(--kunyit);
+}
+
+.testimoni-stars {
+  color: var(--kunyit);
+  font-size: 16px;
+  letter-spacing: 3px;
+  margin-bottom: 14px;
+}
+
+.testimoni-text {
+  font-family: var(--font-display);
+  font-size: 15.5px;
+  font-style: italic;
+  color: var(--kayu-tua);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.testimoni-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--garis);
+}
+
+.testimoni-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--kunyit);
+  color: var(--kayu-tua);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.testimoni-user strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: var(--kayu-tua);
+}
+
+.testimoni-user span {
+  font-size: 12.5px;
+  color: var(--teks-lembut);
+}

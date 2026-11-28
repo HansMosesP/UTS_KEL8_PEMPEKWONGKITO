@@ -1,0 +1,74 @@
+.admin-app .admin-nav {
+  background: var(--kayu-tua);
+  color: var(--kunyit-muda);
+  padding: 16px 0;
+  box-shadow: 0 6px 24px -8px rgba(43, 28, 15, 0.5);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  position: relative;
+}
+
+.admin-app .admin-nav::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--bata), var(--kunyit), var(--musi));
+}
+
+.admin-app .admin-nav-inner {
+  width: min(1180px, 92%);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.admin-app .admin-nav h2 {
+  margin: 0;
+  font-size: 17px;
+  color: var(--kunyit-muda);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.admin-app .admin-nav h2::before {
+  content: "🥟 ";
+  margin-right: 4px;
+}
+
+.admin-app .admin-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-app .admin-name {
+  font-size: 13.5px;
+  color: rgba(250, 243, 226, 0.85);
+  font-weight: 500;
+}
+
+.admin-app .btn-logout {
+  background: var(--kunyit);
+  color: var(--kayu-tua);
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-family: var(--font-body);
+  font-size: 13px;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+.admin-app .btn-logout:hover {
+  background: var(--kunyit-muda);
+  transform: translateY(-1px);
+}
+
+.admin-app .btn-sm-nav { padding: 8px 14px; font-size: 13px; }

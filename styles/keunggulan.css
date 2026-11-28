@@ -1,0 +1,94 @@
+/* KEUNGGULAN */
+.keunggulan-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.keunggulan-card {
+  background: var(--krem);
+  border: 1px solid var(--garis);
+  border-radius: var(--radius-lg);
+  padding: 0;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.keunggulan-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--kunyit), var(--bata));
+  transition: width 0.4s ease;
+  z-index: 2; /* tetap di atas foto */
+}
+
+.keunggulan-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-card);
+  border-color: var(--kunyit);
+}
+
+.keunggulan-card:hover::before { width: 80%; }
+
+/* Foto di atas kartu (pengganti ikon emoji) */
+.keunggulan-photo {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--krem-tua);
+}
+
+.keunggulan-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.keunggulan-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(36, 22, 13, 0.35));
+  pointer-events: none;
+}
+
+.keunggulan-card:hover .keunggulan-photo img { transform: scale(1.06); }
+
+.keunggulan-num {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 0;
+  display: grid;
+  width: 52px;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 4px solid var(--krem);
+  border-radius: 50%;
+  background: var(--kayu-tua);
+  color: var(--kunyit-muda);
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 800;
+  font-variant-numeric: lining-nums;
+  transform: translate(-50%, -50%);
+}
+
+.keunggulan-body { position: relative; padding: 40px 26px 30px; }
+
+.keunggulan-card h3 { font-size: 19px; margin-bottom: 12px; }
+
+.keunggulan-card p {
+  font-size: 14px;
+  color: var(--teks-lembut);
+  margin: 0;
+  line-height: 1.75;
+}

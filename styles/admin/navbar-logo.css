@@ -1,0 +1,46 @@
+.admin-app .admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Hapus emoji bawaan lama */
+.admin-app .admin-nav h2::before {
+  content: none !important;
+  display: none !important;
+}
+
+.admin-app .admin-logo-img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  background: rgba(248, 241, 227, 0.95);
+  padding: 4px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.admin-app .admin-logo-img:hover {
+  transform: scale(1.05) rotate(-3deg);
+}
+
+.admin-app .admin-nav h2 {
+  margin: 0;
+  font-size: 17px;
+  color: var(--kunyit-muda);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 620px) {
+  .admin-app .admin-logo-img {
+    width: 34px;
+    height: 34px;
+  }
+
+  .admin-app .admin-brand h2 {
+    font-size: 14.5px;
+  }
+}

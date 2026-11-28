@@ -1,0 +1,78 @@
+/* FOOTER */
+footer {
+  background: var(--kayu-tua);
+  color: var(--krem);
+  padding: 40px 0;
+  position: relative;
+}
+
+footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--bata), var(--kunyit), var(--musi));
+}
+
+.footer-songket {
+  height: 14px;
+  background-image:
+    repeating-linear-gradient(90deg,
+      var(--kunyit) 0 12px,
+      transparent 12px 20px,
+      var(--bata) 20px 32px,
+      transparent 32px 40px,
+      var(--musi) 40px 52px,
+      transparent 52px 60px
+    );
+  opacity: 0.55;
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-logo .logo-img {
+  width: 48px;
+  height: 48px;
+  background: rgba(248, 241, 227, 0.95);
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.footer-logo .logo-text {
+  color: var(--kunyit-muda);
+  font-size: 22px;
+}
+
+.footer-tagline {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 13px;
+  color: rgba(242, 210, 122, 0.85);
+  margin: 0;
+}
+
+.footer-copy {
+  font-size: 13px;
+  color: rgba(248, 241, 227, 0.65);
+  margin: 0;
+}

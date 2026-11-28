@@ -1,0 +1,25 @@
+.admin-app .card {
+  background: var(--kertas);
+  border-radius: var(--radius-lg);
+  padding: 30px 28px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--garis);
+}
+
+.admin-app .card h2 {
+  font-size: 20px;
+  margin-bottom: 22px;
+  position: relative;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--krem-tua);
+}
+
+.admin-app .card h2::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 48px;
+  height: 2px;
+  background: var(--kunyit);
+}

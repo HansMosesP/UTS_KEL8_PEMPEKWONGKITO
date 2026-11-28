@@ -1,0 +1,178 @@
+.admin-app .filter-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.admin-app .filter-btn {
+  border: 1px solid var(--garis);
+  background: transparent;
+  color: var(--teks-lembut);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 12.5px;
+  transition: all 0.2s ease;
+  letter-spacing: 0.01em;
+}
+
+.admin-app .filter-btn:hover {
+  background: var(--krem-tua);
+  color: var(--kayu-tua);
+}
+
+.admin-app .filter-btn.active {
+  background: var(--kayu-tua);
+  color: var(--kunyit-muda);
+  border-color: var(--kayu-tua);
+}
+
+.admin-app .orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-app .order-card-admin {
+  background: var(--krem);
+  border: 1px solid var(--garis);
+  border-radius: 14px;
+  padding: 20px 22px;
+  border-left: 4px solid var(--kunyit);
+  transition: all 0.2s ease;
+}
+
+.admin-app .order-card-admin:hover {
+  border-left-color: var(--bata);
+  box-shadow: var(--shadow-card);
+}
+
+.admin-app .order-card-admin .order-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px dashed var(--garis);
+}
+
+.admin-app .order-card-admin .order-id {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--kayu-tua);
+}
+
+.admin-app .order-status {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  font-family: var(--font-body);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.admin-app .status-pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+.admin-app .status-process {
+  background: #dbeafe;
+  color: #1e40af;
+}
+.admin-app .status-shipped {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+.admin-app .status-done {
+  background: #d1fae5;
+  color: #065f46;
+}
+.admin-app .status-cancel {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.admin-app .order-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 20px;
+  font-size: 13.5px;
+  color: var(--teks-lembut);
+  margin-bottom: 14px;
+}
+
+.admin-app .order-info-grid strong {
+  color: var(--kayu-tua);
+  font-weight: 600;
+}
+
+.admin-app .order-items-list {
+  font-size: 13.5px;
+  background: var(--kertas);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  border: 1px solid var(--garis);
+}
+
+.admin-app .order-items-list div {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+}
+
+.admin-app .order-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-app .order-actions select {
+  padding: 9px 14px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 13px;
+  background: var(--kertas);
+  border: 1.5px solid var(--garis);
+  color: var(--kayu-tua);
+  cursor: pointer;
+}
+
+.admin-app .order-actions select:focus {
+  outline: none;
+  border-color: var(--kunyit);
+}
+
+.admin-app .btn-status {
+  background: var(--kayu-tua);
+  color: var(--kunyit-muda);
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 12.5px;
+}
+
+.admin-app .btn-status:hover {
+  background: var(--cuko);
+}
+
+.admin-app .btn-cancel-order {
+  background: var(--bata);
+  color: white;
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 12.5px;
+  transition: background 0.2s ease;
+}
+
+.admin-app .btn-cancel-order:hover {
+  background: var(--cuko);
+}

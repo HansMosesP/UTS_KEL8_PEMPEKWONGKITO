@@ -1,0 +1,63 @@
+html, body {
+  cursor: url("../image/dkursor.png") 16 16, auto;
+}
+
+/* Semua elemen interaktif tetap pakai kursor pempek */
+a,
+button,
+.btn,
+.btn-login,
+.btn-cart,
+.btn-order,
+.btn-order-fav,
+.btn-checkout,
+.btn-maps,
+.anatomi-btn,
+.anatomi-tab,
+.anatomi-nav-btn,
+.user-btn,
+.filter-btn,
+.tab-btn,
+.nav-menu a,
+.logo,
+.faq-question,
+.hotspot,
+.anatomi-dot,
+.fav-menu-item,
+.galeri-item {
+  cursor: url("../image/dkursor.png") 16 16, pointer;
+}
+
+/* Input & textarea tetap pakai kursor text bawaan biar nyaman ngetik */
+input,
+textarea,
+select {
+  cursor: text;
+}
+
+select {
+  cursor: pointer;
+}
+
+/* Elemen disabled */
+button:disabled,
+input:disabled,
+.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Mobile / touch device → kembali ke kursor bawaan */
+@media (hover: none) and (pointer: coarse) {
+  html, body, a, button, .btn,
+  .btn-login, .btn-cart, .btn-order, .btn-order-fav,
+  .btn-checkout, .btn-maps, .anatomi-btn, .anatomi-tab,
+  .anatomi-nav-btn, .user-btn, .filter-btn, .tab-btn,
+  .nav-menu a, .logo, .faq-question, .hotspot,
+  .anatomi-dot, .fav-menu-item, .galeri-item {
+    cursor: auto;
+  }
+  input, textarea, select {
+    cursor: auto;
+  }
+}

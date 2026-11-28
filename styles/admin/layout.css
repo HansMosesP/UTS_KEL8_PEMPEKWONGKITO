@@ -1,0 +1,72 @@
+/* Container */
+.admin-app .container {
+  width: min(1180px, 92%);
+  margin: 32px auto 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Tab nav */
+/* Dua baris tab: baris atas berisi menu utama, baris bawah (Peta & Kontak, Edit Teks) di tengah. */
+.admin-app .tab-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  background: var(--kertas);
+  padding: 8px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--garis);
+}
+
+.admin-app .tab-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.admin-app .tab-row + .tab-row {
+  padding-top: 6px;
+  border-top: 1px dashed rgba(201, 180, 138, 0.6);
+}
+
+.admin-app .tab-btn {
+  background: transparent;
+  color: var(--teks-lembut);
+  padding: 11px 22px;
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 13.5px;
+  transition: all 0.2s ease;
+  letter-spacing: 0.01em;
+}
+
+.admin-app .tab-btn:hover {
+  background: var(--krem-tua);
+  color: var(--kayu-tua);
+}
+
+.admin-app .tab-btn.active {
+  background: var(--kayu-tua);
+  color: var(--kunyit-muda);
+}
+
+.admin-app .tab-content {
+  display: none;
+  flex-direction: column;
+  gap: 24px;
+}
+.admin-app .tab-content.active {
+  display: flex;
+}
+
+.admin-app .tab-badge {
+  display: inline-grid; place-items: center; min-width: 20px; height: 20px; margin-left: 4px; padding: 0 6px;
+  border-radius: 999px; background: var(--bata); color: #fff; font-size: 11px; font-weight: 700;
+}

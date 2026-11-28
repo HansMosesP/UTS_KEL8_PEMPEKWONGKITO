@@ -1,0 +1,101 @@
+/* RESPONSIVE */
+@media (max-width: 950px) {
+  .hero { min-height: auto; padding: 60px 0 70px; }
+  .hero-content { grid-template-columns: 1fr; gap: 40px; }
+  .hero-photo { aspect-ratio: 5/4; }
+  .hero-bg img { object-position: center 30%; }
+
+  .hero-ornament-1 { width: 400px; height: 400px; top: -140px; right: -120px; }
+  .hero-ornament-2 { width: 260px; height: 260px; }
+
+  .steps-grid, .menu-grid { grid-template-columns: repeat(2, 1fr); }
+  .kontak-grid { grid-template-columns: 1fr; }
+  .kontak-info { grid-template-columns: 1fr 1fr; }
+
+  .cerita-grid { grid-template-columns: 1fr; gap: 40px; }
+  .cerita-photo { max-width: 340px; }
+  .cerita-frame { transform: rotate(0); }
+  .keunggulan-grid { grid-template-columns: 1fr; }
+  .favorit-card { grid-template-columns: 1fr; }
+  .favorit-img { min-height: 260px; }
+  .favorit-info { padding: 30px 26px 34px; }
+  .testimoni-grid { grid-template-columns: 1fr; }
+  .lokasi-grid { grid-template-columns: 1fr; }
+  .galeri-grid { grid-template-columns: repeat(2, 1fr); }
+  .galeri-big { grid-column: span 2; grid-row: span 1; }
+  .galeri-wide { grid-column: span 2; }
+
+  .anatomi-grid { grid-template-columns: 1fr; gap: 40px; }
+  .anatomi-model { max-width: 400px; }
+  .anatomi-card { min-height: auto; padding: 28px 24px; }
+  .anatomi-glow { width: 380px; height: 380px; }
+}
+
+@media (max-width: 720px) {
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 76px;
+    left: 0;
+    right: 0;
+    background: var(--kertas);
+    flex-direction: column;
+    padding: 16px 5% 22px;
+    gap: 4px;
+    border-bottom: 1px solid var(--garis);
+    box-shadow: var(--shadow-card);
+  }
+
+  .nav-menu.open { display: flex; }
+  .menu-btn { display: block; }
+  header nav { position: relative; }
+  .logo { font-size: 18px; }
+  .logo-img { width: 36px; height: 36px; }
+  .logo-text { font-size: 17px; }
+
+  .hero { padding: 50px 0 60px; }
+  .hero-text h1 { font-size: 2rem; }
+
+  .section { padding: 60px 0; }
+  .section-title { margin-bottom: 40px; }
+
+  .timeline, .steps-grid, .menu-grid, .kontak-info { grid-template-columns: 1fr; }
+
+  .btn-login { padding: 9px 16px; font-size: 13px; }
+  .btn-cart { padding: 8px 10px; font-size: 15px; }
+
+  .user-name, .user-caret { display: none; }
+  .user-btn { padding: 6px; gap: 0; }
+  .user-avatar { width: 34px; height: 34px; }
+
+  .auth-box, .cart-box, .checkout-box, .customer-box { padding: 28px 22px 24px; }
+  .auth-box h3, .cart-box h3, .checkout-box h3 { font-size: 21px; }
+
+  .hero-stats { gap: 22px; margin-top: 34px; padding-top: 24px; }
+  .hero-stats > div h3 { font-size: 22px; }
+
+  .fav-menu-box { grid-template-columns: 1fr; }
+  .cerita-lead p { font-size: 17px; }
+  .favorit-info h3 { font-size: 22px; }
+  .favorit-price { font-size: 24px; }
+
+  .anatomi-model { max-width: 340px; }
+  .anatomi-tabs { padding: 4px; }
+  .anatomi-tab { padding: 7px 13px; font-size: 12px; }
+  .anatomi-card { padding: 24px 20px 22px; min-height: auto; }
+  .anatomi-content h3 { font-size: 20px; }
+  .anatomi-cta { flex-direction: column; }
+  .anatomi-cta .btn { width: 100%; justify-content: center; }
+  .anatomi-controls { gap: 6px; }
+  .anatomi-btn { padding: 9px 14px; font-size: 12px; }
+  .anatomi-btn-text { display: none; }
+  .anatomi-btn-icon { font-size: 16px; }
+  .anatomi-glow { width: 300px; height: 300px; }
+  .anatomi-progress { gap: 6px; }
+  .anatomi-dot { width: 8px; height: 8px; }
+}
+
+@media (max-width: 420px) {
+  .btn { padding: 12px 20px; font-size: 13.5px; }
+  .hero-text > p { font-size: 15px; }
+}

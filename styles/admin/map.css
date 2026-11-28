@@ -1,0 +1,13 @@
+.admin-app .map-input-row { display: flex; gap: 10px; align-items: flex-start; }
+
+.admin-app .map-input-row textarea { flex: 1; }
+
+.admin-app .map-input-row .btn { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; padding: 12px 16px; }
+
+.admin-app .map-preview { overflow: hidden; margin: 4px 0 16px; border: 1px solid var(--garis); border-radius: var(--radius); }
+
+.admin-app .map-preview iframe { display: block; width: 100%; height: 300px; border: 0; }
+
+@media (max-width: 620px) {
+  .admin-app .map-input-row { flex-direction: column; align-items: stretch; }
+}

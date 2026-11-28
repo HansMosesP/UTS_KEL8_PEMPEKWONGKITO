@@ -1,0 +1,67 @@
+.admin-app .list-editor + .list-editor { margin-top: 24px; }
+
+.admin-app .list-count { margin-left: 6px; color: var(--teks-lembut); font-family: var(--font-body); font-size: 13px; font-weight: 500; }
+
+.admin-app .list-editor-items { display: grid; gap: 14px; margin: 0 0 14px; padding: 0; list-style: none; }
+
+.admin-app .list-editor-item { padding: 16px 18px 6px; border: 1px solid var(--garis); border-radius: var(--radius); background: var(--krem); }
+
+.admin-app .list-editor-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
+
+.admin-app .list-editor-number { font-weight: 700; color: var(--kayu); }
+
+.admin-app .list-editor-actions { display: flex; gap: 6px; }
+
+.admin-app .btn-icon {
+  display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--garis);
+  border-radius: 8px; background: var(--kertas); color: var(--kayu); cursor: pointer; transition: all .15s ease;
+}
+
+.admin-app .btn-icon:hover:not(:disabled) { background: var(--krem-tua); }
+
+.admin-app .btn-icon:disabled { opacity: .35; cursor: not-allowed; }
+
+.admin-app .btn-icon.add { border-color: var(--musi); color: var(--musi); }
+
+.admin-app .btn-icon.add:hover:not(:disabled) { background: var(--musi); color: #fff; }
+
+.admin-app .btn-icon.remove { border-color: var(--bata); color: var(--bata); }
+
+.admin-app .btn-icon.remove:hover:not(:disabled) { background: var(--bata); color: #fff; }
+
+.admin-app .list-editor-field textarea, .admin-app .list-editor-field input { background: var(--kertas) !important; }
+
+.admin-app .required { margin-left: 3px; color: var(--bata); }
+
+.admin-app .btn-add-item {
+  display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 12px;
+  border: 1.5px dashed var(--garis); border-radius: var(--radius); background: transparent; color: var(--musi);
+  font-weight: 600; cursor: pointer;
+}
+
+.admin-app .btn-add-item:hover:not(:disabled) { border-color: var(--musi); background: #eef6f2; }
+
+.admin-app .btn-add-item:disabled { opacity: .5; cursor: not-allowed; }
+
+.admin-app .savebar-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+.admin-app .list-editor-select { margin-bottom: 12px; background-color: var(--kertas); }
+
+.admin-app .list-editor-hint { margin: -6px 0 12px; }
+
+/* Tautan "lompat ke" di tab Konten Halaman */
+.admin-app .section-jump { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+
+.admin-app .section-jump a {
+  padding: 7px 16px; border: 1px solid var(--garis); border-radius: 999px; background: var(--kertas);
+  color: var(--kayu); font-size: 13px; font-weight: 600; text-decoration: none; transition: background .15s ease;
+}
+
+.admin-app .section-jump a:hover { background: var(--krem-tua); }
+
+.admin-app .list-editor[id] { scroll-margin-top: 90px; }
+
+@media (max-width: 620px) {
+  .admin-app .list-editor-head { flex-direction: column; align-items: flex-start; }
+  .admin-app .savebar-actions { width: 100%; }
+}

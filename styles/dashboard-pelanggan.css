@@ -1,0 +1,5 @@
+.customer-dashboard { min-height: 55vh; }
+.customer-dashboard > a { display: inline-block; margin: 10px 14px 0 0; color: var(--bata); font-weight: 700; }
+
+.customer-dashboard a { color: var(--bata); font-weight: 700; }
+.customer-dashboard .container > a { display: inline-block; margin-top: 18px; }

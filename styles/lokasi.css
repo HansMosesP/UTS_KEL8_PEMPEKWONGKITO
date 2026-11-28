@@ -1,0 +1,91 @@
+.lokasi-map iframe { width: 100%; height: 100%; min-height: 320px; border: 0; }
+
+/* LOKASI */
+.lokasi-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 32px;
+  align-items: stretch;
+}
+
+.lokasi-info {
+  background: var(--kertas);
+  border: 1px solid var(--garis);
+  border-radius: var(--radius-lg);
+  padding: 32px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.lokasi-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.lokasi-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  background: var(--krem-tua);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lokasi-item strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: var(--kayu-tua);
+  margin-bottom: 4px;
+}
+
+.lokasi-item p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--teks-lembut);
+  line-height: 1.6;
+}
+
+.btn-maps {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--kayu-tua);
+  color: var(--kunyit-muda);
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14.5px;
+  transition: all 0.2s ease;
+  margin-top: auto;
+}
+
+.btn-maps:hover {
+  background: var(--cuko);
+  transform: translateY(-2px);
+}
+
+.lokasi-map {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  border: 6px solid var(--kertas);
+  min-height: 380px;
+}
+
+.lokasi-map iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+}
+
+.lokasi-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; }
+.btn-wa { background: #1f7a4d; color: #fff; }
+.btn-wa:hover { background: #17633e; }

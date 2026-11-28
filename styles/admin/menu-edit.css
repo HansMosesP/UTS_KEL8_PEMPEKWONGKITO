@@ -1,0 +1,246 @@
+/* Tombol aksi di item menu */
+.admin-app .admin-menu-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-app .btn-edit {
+  background: var(--kayu-tua);
+  color: var(--kunyit-muda);
+  border: 0;
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-app .btn-edit:hover {
+  background: var(--cuko);
+  transform: translateY(-1px);
+}
+
+.admin-app .edit-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(36, 22, 13, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.admin-app .edit-modal.show {
+  display: flex;
+}
+
+.admin-app .edit-box {
+  background: var(--kertas);
+  border-radius: 20px;
+  padding: 34px 30px 28px;
+  width: 100%;
+  max-width: 460px;
+  position: relative;
+  box-shadow: 0 30px 60px rgba(36, 22, 13, 0.4);
+  animation: editFadeIn 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 92vh;
+  overflow-y: auto;
+  border: 1px solid var(--garis);
+}
+
+@keyframes editFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.admin-app .edit-close {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  background: transparent;
+  border: 0;
+  font-size: 26px;
+  line-height: 1;
+  color: var(--teks-lembut);
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.admin-app .edit-close:hover {
+  background: var(--krem-tua);
+  color: var(--kayu-tua);
+}
+
+.admin-app .edit-box h3 {
+  font-size: 24px;
+  margin-bottom: 4px;
+  font-family: var(--font-display);
+  color: var(--kayu-tua);
+}
+
+.admin-app .edit-sub {
+  font-size: 13.5px;
+  color: var(--teks-lembut);
+  margin-bottom: 22px;
+}
+
+.admin-app .edit-label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--teks-lembut);
+  margin-bottom: 6px;
+  margin-top: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.admin-app .edit-box input[type="text"], .admin-app .edit-box input[type="number"], .admin-app .edit-box input:not([type]), .admin-app .edit-box textarea {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1.5px solid var(--garis);
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14.5px;
+  background: var(--krem);
+  color: var(--teks);
+  transition: all 0.2s ease;
+  margin-bottom: 4px;
+}
+
+.admin-app .edit-box input:focus, .admin-app .edit-box textarea:focus {
+  outline: none;
+  border-color: var(--kunyit);
+  background: var(--kertas);
+  box-shadow: 0 0 0 3px rgba(201, 151, 43, 0.15);
+}
+
+.admin-app .edit-box textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Foto di modal edit */
+.admin-app .edit-photo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: var(--krem);
+  border: 1.5px dashed var(--garis);
+  border-radius: 14px;
+  margin-bottom: 6px;
+}
+
+.admin-app .edit-photo img {
+  width: 100%;
+  max-width: 220px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: var(--krem-tua);
+  box-shadow: 0 8px 20px -8px rgba(36, 22, 13, 0.3);
+  border: 4px solid var(--kertas);
+}
+
+.admin-app .edit-photo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--kayu-tua);
+  color: var(--kunyit-muda);
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+.admin-app .edit-photo-btn:hover {
+  background: var(--cuko);
+  transform: translateY(-1px);
+}
+
+.admin-app .edit-photo-btn input[type="file"] {
+  display: none;
+}
+
+/* Aksi tombol */
+.admin-app .edit-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.admin-app .btn-cancel-edit, .admin-app .btn-save-edit {
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 0;
+  letter-spacing: 0.02em;
+}
+
+.admin-app .btn-cancel-edit {
+  background: var(--krem-tua);
+  color: var(--kayu-tua);
+  border: 1.5px solid var(--garis);
+}
+
+.admin-app .btn-cancel-edit:hover {
+  background: #e0d0b0;
+}
+
+.admin-app .btn-save-edit {
+  background: var(--kayu-tua);
+  color: var(--kunyit-muda);
+}
+
+.admin-app .btn-save-edit:hover {
+  background: var(--cuko);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px -8px rgba(123, 50, 24, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .admin-app .edit-box {
+    padding: 28px 22px 24px;
+  }
+
+  .admin-app .edit-box h3 {
+    font-size: 20px;
+  }
+
+  .admin-app .edit-actions {
+    flex-direction: column-reverse;
+  }
+
+  .admin-app .edit-photo img {
+    max-width: 100%;
+    height: 140px;
+  }
+}

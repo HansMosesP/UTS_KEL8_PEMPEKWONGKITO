@@ -1,0 +1,275 @@
+/* Stats grid */
+/* Kartu statistik tanpa ikon: garis warna di atas + keterangan kecil di bawah angka. */
+.admin-app .stat-card {
+  --accent: var(--kunyit);
+  background: var(--kertas);
+  border-radius: var(--radius);
+  padding: 24px 22px 20px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--garis);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-app .stat-kunyit { --accent: var(--kunyit); }
+.admin-app .stat-musi { --accent: var(--musi); }
+.admin-app .stat-bata { --accent: var(--bata); }
+.admin-app .stat-kayu { --accent: var(--kayu); }
+
+.admin-app .stat-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--accent);
+}
+
+.admin-app .stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card);
+  border-color: var(--accent);
+}
+
+.admin-app .stat-note {
+  margin: 8px 0 0;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(201, 180, 138, 0.6);
+  font-size: 12.5px;
+  color: var(--teks-lembut);
+}
+
+.admin-app .stat-label {
+  font-size: 11.5px;
+  color: var(--teks-lembut);
+  margin: 0 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+
+.admin-app .stat-card h3 {
+  margin: 0;
+  font-size: 22px;
+  font-family: var(--font-display);
+  color: var(--kayu-tua);
+  font-weight: 800;
+}
+
+/* Chart bars */
+.admin-app .chart-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-app .chart-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 50px;
+  gap: 14px;
+  align-items: center;
+}
+
+.admin-app .chart-label {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--teks-lembut);
+}
+
+.admin-app .chart-track {
+  background: var(--krem-tua);
+  height: 22px;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.admin-app .chart-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 4px;
+}
+
+.admin-app .chart-fill.pending {
+  background: linear-gradient(90deg, #f0b429, #d4a017);
+}
+.admin-app .chart-fill.process {
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+}
+.admin-app .chart-fill.shipped {
+  background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+}
+.admin-app .chart-fill.done {
+  background: linear-gradient(90deg, var(--musi-muda), var(--musi));
+}
+.admin-app .chart-fill.cancel {
+  background: linear-gradient(90deg, #ef4444, var(--bata));
+}
+
+.admin-app .chart-count {
+  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: var(--kayu-tua);
+  text-align: right;
+}
+
+/* Recent orders */
+.admin-app .recent-orders {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-app .recent-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  background: var(--krem);
+  border: 1px solid var(--garis);
+  border-radius: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.admin-app .recent-item:hover {
+  border-color: var(--kunyit);
+}
+
+.admin-app .recent-item .order-id {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--kayu-tua);
+  letter-spacing: 0.01em;
+}
+
+.admin-app .recent-item .order-meta {
+  font-size: 12.5px;
+  color: var(--teks-lembut);
+  margin-top: 2px;
+}
+
+/* Dashboard hero dan kolom */
+.admin-app .dashboard-hero {
+  background: linear-gradient(135deg, var(--kayu-tua) 0%, var(--cuko) 100%);
+  border-radius: var(--radius-lg);
+  padding: 30px 32px;
+  color: var(--krem);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.admin-app .dashboard-hero::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 200px;
+  height: 200px;
+  border: 2px dashed rgba(242, 210, 122, 0.3);
+  border-radius: 50%;
+}
+
+.admin-app .dashboard-hero::after {
+  content: "";
+  position: absolute;
+  bottom: -40px;
+  right: 100px;
+  width: 120px;
+  height: 120px;
+  border: 1.5px solid rgba(242, 210, 122, 0.2);
+  border-radius: 50%;
+}
+
+.admin-app .dash-eyebrow {
+  font-size: 11.5px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--kunyit-muda);
+  margin: 0 0 6px;
+  font-weight: 700;
+  position: relative;
+}
+
+.admin-app .dash-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--krem);
+  margin: 0 0 4px;
+  position: relative;
+}
+
+.admin-app .dash-sub {
+  font-size: 13.5px;
+  color: rgba(248, 241, 227, 0.75);
+  margin: 0;
+  position: relative;
+}
+
+.admin-app .dash-two-col {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 22px;
+}
+
+.admin-app .top-menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-app .top-menu-item {
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  background: var(--krem);
+  border-radius: 10px;
+  border: 1px solid var(--garis);
+}
+
+.admin-app .top-menu-rank {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--kunyit);
+  color: var(--kayu-tua);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.admin-app .top-menu-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--kayu-tua);
+}
+
+.admin-app .top-menu-count {
+  font-size: 12px;
+  color: var(--cuko);
+  font-weight: 700;
+  background: var(--krem-tua);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+@media (max-width: 900px) {
+  .admin-app .dash-two-col {
+    grid-template-columns: 1fr;
+  }
+}

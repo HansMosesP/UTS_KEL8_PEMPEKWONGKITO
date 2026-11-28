@@ -1,0 +1,64 @@
+.admin-app .admin-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-app .admin-menu-item {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  gap: 18px;
+  align-items: center;
+  background: var(--krem);
+  border: 1px solid var(--garis);
+  border-radius: 14px;
+  padding: 14px 18px;
+  transition: all 0.2s ease;
+}
+
+.admin-app .admin-menu-item:hover {
+  border-color: var(--kunyit);
+  transform: translateX(3px);
+}
+
+.admin-app .admin-menu-item img {
+  width: 90px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: var(--krem-tua);
+}
+
+.admin-app .admin-menu-info h4 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-family: var(--font-display);
+}
+
+.admin-app .admin-menu-info p {
+  margin: 0 0 6px;
+  font-size: 13px;
+  color: var(--teks-lembut);
+}
+
+.admin-app .admin-menu-info strong {
+  font-size: 14px;
+  color: var(--cuko);
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+
+.admin-app .btn-delete {
+  background: var(--bata);
+  color: white;
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  transition: all 0.2s ease;
+}
+
+.admin-app .btn-delete:hover {
+  background: var(--cuko);
+}
